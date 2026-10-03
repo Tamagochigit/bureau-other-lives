@@ -1,0 +1,8 @@
+{
+  "name": "bureau-of-other-lives",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A personal Russian-language web app for small experiences and an interest journal.",
+  "scripts": { "test": "node --test --test-concurrency=1 tests/*.test.mjs", "verify": "node scripts/verify.mjs", "context": "node scripts/extract-context.mjs" }
+}

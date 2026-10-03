@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f4ef">
+  <meta name="description" content="Примеряй новые роли, проживай маленькие приключения и находи то, к чему хочется вернуться. Бюро других жизней — личный дневник открытий.">
+  <meta name="color-scheme" content="light">
+  <title>Бюро других жизней — маленькие приключения</title>
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">К содержимому</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Навигация">
+      <a class="brand" href="#home" aria-label="Бюро других жизней — главная">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="brand-name">БЮРО<br><span>ДРУГИХ ЖИЗНЕЙ</span></span>
+      </a>
+      <div class="sidebar-caption">ТВОЯ МАЛЕНЬКАЯ ЭКСПЕДИЦИЯ</div>
+      <nav class="nav" id="navigation"></nav>
+      <div class="sidebar-note"><span class="note-orbit" aria-hidden="true">↗</span><p>Можно начать<br>с любопытства.</p><span>Один новый опыт за раз.</span></div>
+      <button class="sidebar-help" data-action="about"><span aria-hidden="true">?</span> Как это устроено</button>
+      <div class="version">ПЕРВАЯ ГЛАВА · 01</div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar"><span class="topbar-label" id="page-label">Личное бюро открытий</span><span class="topbar-right"><span class="status-dot"></span> В своём темпе <button class="icon-button" data-action="settings" aria-label="Дневник и резервная копия" title="Дневник и резервная копия" id="settings-icon"></button></span></header>
+      <div id="storage-warning" class="storage-warning" role="status" hidden></div>
+      <main id="main" tabindex="-1"></main>
+      <footer class="footer"><span>БЮРО ДРУГИХ ЖИЗНЕЙ</span><span>Собирай моменты, к которым хочется вернуться.</span></footer>
+    </div>
+  </div>
+  <dialog id="detail-dialog" class="detail-dialog" aria-labelledby="dialog-title"><div id="dialog-content"></div></dialog>
+  <dialog id="feedback-dialog" class="feedback-dialog" aria-labelledby="feedback-title"><div id="feedback-content"></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <input id="backup-file" type="file" accept="application/json,.json" hidden>
+  <noscript><div class="noscript">Для миссий и дневника включи JavaScript в браузере.</div></noscript>
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>
