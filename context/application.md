@@ -8,6 +8,7 @@ Regenerate when application modules, catalog or hosting manifest change.
 - Storage key: `other-lives:state:v1`
 - Maximum entries: 5000
 - Browser views: home, missions, traditions, compass, diary
+- Home selection defaults: time 15 minutes, place home
 - Mission count: 20
 - Tradition count: 6
 - Interest categories: curiosity, create, connect, slow

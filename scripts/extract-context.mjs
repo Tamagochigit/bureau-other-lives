@@ -2,7 +2,9 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { MISSIONS, TRADITIONS, CATEGORIES } from '../dist/data.mjs';
 import { STORAGE_KEY, MAX_ENTRIES } from '../dist/core.mjs';
 const hosting=JSON.parse(await readFile('.openai/hosting.json','utf8'));
-const views=[...((await readFile('dist/app.mjs','utf8')).match(/const VIEWS = \{(.+)\};/)?.[1] || '').matchAll(/([a-z]+): \[/g)].map(m=>m[1]);
+const app=await readFile('dist/app.mjs','utf8');
+const homeDefaults=app.match(/const homeFilters = \{ time: '([^']+)', place: '([^']+)' \};/);
+const views=[...(app.match(/const VIEWS = \{(.+)\};/)?.[1] || '').matchAll(/([a-z]+): \[/g)].map(m=>m[1]);
 const content=[
   '# Application facts',
   '',
@@ -14,6 +16,7 @@ const content=[
   '- Storage key: `'+STORAGE_KEY+'`',
   '- Maximum entries: '+MAX_ENTRIES,
   '- Browser views: '+views.join(', '),
+  '- Home selection defaults: time '+homeDefaults[1]+' minutes, place '+homeDefaults[2],
   '- Mission count: '+MISSIONS.length,
   '- Tradition count: '+TRADITIONS.length,
   '- Interest categories: '+Object.keys(CATEGORIES).join(', '),

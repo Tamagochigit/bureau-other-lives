@@ -10,4 +10,6 @@ One mission may be active. Replacing it requires an explicit in-app confirmation
 
 No payments, external AI, social profiles, messaging, automatic reminders or cloud diary sync were requested. Invitation text is copied, never sent by the application.
 
+Current start, after explicit owner feedback on 2026-10-04: select time and place, open one suitable mission, or resume the active experience. The simple selector reuses the existing catalog logic; it is not a learned recommendation system. The readability and scope limits live in [UX](ux.md) and R08–R09 in [requirements](requirements.md).
+
 Code: [catalog](../dist/data.mjs), [state](../dist/core.mjs), [UI](../dist/app.mjs). Review when scope or the meaning of a rating changes.

@@ -16,4 +16,10 @@ Agent choice: arithmetic means of 1–5 self-ratings by activity category. Avoid
 
 Agent choice: authored HTML/CSS/ES modules, native dialogs and a curated catalog. A framework, backend and generated activity feed would add dependencies before this concept is tried. Revisit if server behaviour or substantial shared state becomes necessary.
 
+## 2026-10-04 — Readability before feature expansion
+
+The owner requested only important work and reported poor readability and visual noise. Codex chose a coherent typography/layout replacement and a short start over adding the proposed personalisation, journeys and new compass measures. Merely scaling the old CSS would retain conflicting mobile reductions and competing home panels.
+
+The existing mission filters now serve the home selector; active progress has precedence. Native catalog disclosure keeps optional controls available without showing them all initially. Diary schema and aggregation stay unchanged. Revisit the feature scope only with a new user request; inspect actual phone layout before claiming visual acceptance.
+
 See [requirements](requirements.md), [architecture](architecture.md) and [changes](changes.md). Review when an alternative is adopted; record a new decision rather than rewriting old reasoning.

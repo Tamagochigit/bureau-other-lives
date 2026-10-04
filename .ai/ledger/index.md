@@ -6,3 +6,5 @@ Regenerate when a ledger record is added or changed.
 - [question: first application format](question/first-application-format.md)
 - [failure: icon conversion missing cairosvg 64037130cdd6](failure/icon-conversion-missing-cairosvg-64037130cdd6.md)
 - [failure: optional css parser unavailable c81183d033de](failure/optional-css-parser-unavailable-c81183d033de.md)
+- [failure: readability links contrast](failure/readability-links-contrast.md)
+- [requirement: readability and scope](requirement/readability-and-scope.md)

@@ -26,8 +26,14 @@ test('the real UI handlers connect selection, progress, reflection, diary and co
   globalThis.clearTimeout=()=>{};
   globalThis.FormData=class{constructor(form){this.values=form.values;}get(key){return this.values[key] ?? null;}};
   await import('../dist/app.mjs?ui-test');
-  assert.match(elements.get('#main').innerHTML,/Сегодня можно/);
+  assert.match(elements.get('#main').innerHTML,/Что попробуем сегодня/);
   const click = (action,id,extra={}) => events.click({target:{closest:()=>({dataset:{action,id,...extra}})}});
+  events.change({target:{id:'home-time',value:'10',matches:()=>false}});
+  events.change({target:{id:'home-place',value:'home',matches:()=>false}});
+  await click('surprise');
+  assert.match(elements.get('#dialog-content').innerHTML,/10 минут/);
+  assert.match(elements.get('#dialog-content').innerHTML,/Дома/);
+  await click('close-detail');
   await click('mission','detail-hunter');
   assert.ok(elements.get('#detail-dialog').open);
   await click('begin','detail-hunter');

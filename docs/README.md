@@ -14,7 +14,7 @@ One canonical home per fact; the generated wiki links to these homes.
 - [Stack](stack.md) — entry point to extracted facts.
 - [Testing](testing.md) — verification scope and manual acceptance.
 - [Project](project.md) — delivery scope and follow-up conditions.
-- [Changes](changes.md) — provenance of the first version.
+- [Changes](changes.md) — provenance and observed verification for each change.
 - [Drift](drift.md) — decisions that change direction.
 - [Glossary](glossary.md) — the meaning of mission, tradition and compass.
 - [Onboarding](onboarding.md) — where to change each common surface.
