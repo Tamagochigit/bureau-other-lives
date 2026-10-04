@@ -8,6 +8,7 @@ Regenerate when a ledger record is added or changed.
 - [failure: icon conversion missing cairosvg 64037130cdd6](failure/icon-conversion-missing-cairosvg-64037130cdd6.md)
 - [failure: optional css parser unavailable c81183d033de](failure/optional-css-parser-unavailable-c81183d033de.md)
 - [failure: pages fixture repeat](failure/pages-fixture-repeat.md)
+- [failure: private smoke header](failure/private-smoke-header.md)
 - [failure: readability links contrast](failure/readability-links-contrast.md)
 - [failure: requirement status enum](failure/requirement-status-enum.md)
 - [failure: wiki index write flag](failure/wiki-index-write-flag.md)

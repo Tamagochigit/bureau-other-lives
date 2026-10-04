@@ -20,4 +20,4 @@ Owner: Я создал. Можешь и сайт перенести и всё т
 
 ## Acceptance
 
-R10 and R13-R14 in docs/requirements.md; current protected server retained after unanswered optional host question; publication receipts pending.
+R10 and R13-R14 in docs/requirements.md; current protected server retained after unanswered optional host question. Full GitHub source/history clone, successful Pages workflow and live asset checks are recorded in docs/changes.md.

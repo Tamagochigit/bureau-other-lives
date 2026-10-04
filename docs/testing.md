@@ -6,6 +6,8 @@ Run `node scripts/verify.mjs` once after the coherent implementation batch. It c
 
 Migration local results: 21/21 tests passed across the initial suite and the targeted fixture-fix rerun. Remaining verify checks, lint, TypeScript, Pages build and supported Worker build exited 0. Strict knowledge coverage and fresh librarian/newcomer closure passed. Source/publication receipts live in change provenance; no signed-in browser/device acceptance is inferred from these checks.
 
+Production migration checks: GitHub's fresh runner passed all 21 tests and both Pages build/deploy jobs. A normal GitHub clone preserved the exact source tree and original history. The live Pages home and 14 served assets returned 200; asset hashes matched the verified build and modules had JavaScript MIME. Protected chat config/module/health returned 200 under service access, while the user API still required visitor identity (401). Signed-in two-account and phone layout acceptance remain manual. See the publication receipt in changes.md for exact commit/run/deployment identifiers.
+
 [Core tests](../tests/core.test.mjs) cover persistence round trips, partial progress, required ratings, combined filters, surprise choice, truthful compass averages, backup idempotence/newer edits, malformed input rejection, safe personal text and retired mission titles.
 
 [UI event tests](../tests/ui.test.mjs) execute the real application module with a lightweight DOM/event harness. They cover home time/place selection → mission, selection → progress → feedback → diary → compass, favourites, tradition selection, concurrent diary preservation and visible storage failure. They do not prove visual layout, CSS sizing, actual browser dialog behaviour or installability.
