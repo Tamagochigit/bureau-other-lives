@@ -1,6 +1,6 @@
 # Testing
 
-Run `node scripts/verify.mjs` once after the coherent implementation batch. It checks JS syntax, all core and UI-event tests, declared asset paths, tradition-to-mission links and the diary network boundary.
+Run `node scripts/verify.mjs` once after the coherent implementation batch. It checks JS syntax, core, UI-event and SQLite/social tests, declared asset paths, tradition-to-mission links and the diary network boundary.
 
 [Core tests](../tests/core.test.mjs) cover persistence round trips, partial progress, required ratings, combined filters, surprise choice, truthful compass averages, backup idempotence/newer edits, malformed input rejection, safe personal text and retired mission titles.
 
@@ -14,4 +14,8 @@ For the readability change, also inspect 320–430 px widths and browser zoom: t
 
 Verification result is recorded in [change provenance](changes.md) after the checks run. Review when test scope or an acceptance result changes.
 
-Observed on 2026-10-04 for this change: application verification exited 0 with 11/11 tests. Declared-colour/font inspection exited 0 after darkening the orange link token: main text 14.66:1, secondary text 7.74:1, links 7.62:1. Body is 18 px and the smallest declared text is 14 px at the default 16 px browser base. CSS parser packages were unavailable; block balance and manual source review do not substitute for browser acceptance.
+Observed on 2026-10-04 for the earlier readability change: application verification exited 0 with 11/11 tests. Declared-colour/font inspection exited 0 after darkening the orange link token: main text 14.66:1, secondary text 7.74:1, links 7.62:1. Body is 18 px and the smallest declared text is 14 px at the default 16 px browser base. CSS parser packages were unavailable; block balance and manual source review do not substitute for browser acceptance.
+
+[Social tests](../tests/social.test.mjs) execute the real generated migration and bound query text on SQLite through a D1-shaped adapter. They cover Sites identity required by the handler, same-origin/body limits, one-use/expired/racing invites, outsider isolation, stored message reload, idempotent retries, read markers, block/unblock and a block between membership check and SQL read, pagination, rate limits, mission title resolution and escaping. A lightweight controller harness exercises per-friend drafts and a lost-response retry against that API. This is not a deployed browser or proof of the Sites identity proxy.
+
+The chat batch verification passed 18/18 tests; lint, TypeScript and supported Worker build exited 0. Evidence and remaining checks live in change provenance. Node 24 supplies node:sqlite here. Two real signed-in participants and phone/browser layout remain unverified; named friend Site access is still needed. Manual chat script: grant access, create/accept link, exchange/reload messages on two accounts, retry a failed send, share/open a mission, then block/unblock. Confirm diary notes are never included in messages.

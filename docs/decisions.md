@@ -23,3 +23,13 @@ The owner requested only important work and reported poor readability and visual
 The existing mission filters now serve the home selector; active progress has precedence. Native catalog disclosure keeps optional controls available without showing them all initially. Diary schema and aggregation stay unchanged. Revisit the feature scope only with a new user request; inspect actual phone layout before claiming visual acceptance.
 
 See [requirements](requirements.md), [architecture](architecture.md) and [changes](changes.md). Review when an alternative is adopted; record a new decision rather than rewriting old reasoning.
+
+## 2026-10-04 — Git and friends, after the new request
+
+The owner requested «гит» and a messenger. Optional clarification returned no answer. Agent defaults: literal Git source/history, friends messaging inside this app. The existing Sites repository already has history; a portable Git bundle provides handoff without inventing a GitHub destination. Revisit if the owner meant a guide or supplies an external Git target.
+
+Messaging needs shared durable state, so this request activates the earlier tooling reversal condition: migrate hosting to the supported Sites Vinext Worker/D1 starter while preserving the authored browser interface and the local diary key/schema. Alternatives: a local fake chat would not connect friends; third-party messaging would introduce credentials/services beyond the request. D1 stores only chat data; no diary synchronisation or end-to-end encryption is implied. Schema migrations are generated and packaged through Sites.
+
+Invite links are random, stored as hashes, expire in seven days and can be accepted by one signed-in user. A friendship is separate from Site access. The audience stays owner-private because no named friend/address or request to make the Site public was supplied. Friends onboarding can proceed when the intended addresses arrive. Review if the owner explicitly changes the audience or asks for multi-device diary sync.
+
+Five primary navigation actions remain; traditions move into the catalog so friends does not expand the fixed mobile bar. Only personal messages, mission cards, unread counts and blocking are added. Revisit scope with actual use, keeping the readability preference.

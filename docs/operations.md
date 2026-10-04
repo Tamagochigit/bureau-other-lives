@@ -1,15 +1,17 @@
 # Operations
 
-This is a private Sites project. Preserve the project identity in [.openai/hosting.json](../.openai/hosting.json), the audience and the returned checkout. The static directory is the actual runtime source, so there is no separate bundling stage.
+This is an existing owner-private Sites project. Preserve project id, checkout and audience in [.openai/hosting.json](../.openai/hosting.json). The current profile is a Worker with D1 binding `DB`; browser source is public/, and dist/ is generated build output. No R2 binding is needed.
 
-Use the installed Sites skill for source synchronisation and publication. Obtain a credential for this same project; pass it only through the source helper's hidden stdin. Never put it in an argument, file, log or repository.
+Use the installed Sites skill for installation, build, source synchronisation and publishing. Finish one coherent code/knowledge batch, run verification/lint/build and regenerate context. Obtain a source credential for this same project, pass it only through the source helper's hidden stdin, and use that helper to commit/push/package the exact output. Save/deploy the matching archive with the private Sites operation. Poll non-terminal deployments until complete. Do not create a new project as a repair.
 
-Order: finish code and documentation → run `node scripts/verify.mjs` → update derived context → use the Sites source helper to push this exact source and package the declared static directory → save/deploy that matching archive through the private Sites operation → check a non-terminal deployment until it completes. Do not create another project if publication fails.
+Schema changes: edit db/schema.ts, run `npm run db:generate`, inspect schema-only SQL, and commit new drizzle migrations plus journal/snapshot. Sites applies packaged migrations before the Worker. Never rewrite an applied migration or create tables during a request. No diary migration is involved in this change.
 
-Recovery: retain saved version and deployment identifiers. Retry deployment of an already saved version rather than creating another saved version. A known prior saved version can be selected for rollback. No database migration exists.
+Friends onboarding: first obtain the intended friend's sign-in address and explicitly add that named viewer using Sites access controls. Then pass a one-use chat invitation link to that friend; after sign-in they accept it in the friends view. Invitations expire after seven days and do not change the Site audience. Do not open the Site to the public or send access emails to guessed recipients. No friend address was provided in the current request.
 
-User data recovery is independent of deployment: import a valid exported diary file. A new device has its own localStorage. Clearing browser storage cannot be repaired without a backup.
+Recovery: retain version/deployment identifiers. Retry a saved version rather than duplicating it. Inspect Worker/migration logs after a failed deployment. Worker rollback does not undo D1 schema or message data; use compatible forward changes and preserve existing migrations/bindings. Diary recovery remains independent: import a valid local backup. New devices have a separate diary.
 
-Managed browser QA was unavailable because the required control-browser skill was not installed. No preview server or substitute browser path was started.
+Source handoff: after the source helper creates the final commit, export `git bundle create bureau-other-lives.bundle --all` and verify it. A bundle contains Git history, not runtime chat databases or credentials. An external GitHub repository needs a separate target/repository decision.
 
-Review when hosting profile, source workflow, access or storage changes. See [architecture](architecture.md) and [testing](testing.md).
+Managed preview depends on the unavailable control-browser skill. Do not start an improvised preview server/browser. Build, SQLite/API tests and native deployment status are evidence; phone layout and two real signed-in participants remain manual acceptance.
+
+Review when hosting, access, migration or source workflows change. See [architecture](architecture.md) and [testing](testing.md).

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { MISSIONS } from '../dist/data.mjs';
-import { emptyState, beginMission, toggleStep, completeMission, editEntry, filterMissions, surpriseMission, compass, backup, importBackup, decodeState, escapeHtml } from '../dist/core.mjs';
+import { MISSIONS } from '../public/data.mjs';
+import { emptyState, beginMission, toggleStep, completeMission, editEntry, filterMissions, surpriseMission, compass, backup, importBackup, decodeState, escapeHtml } from '../public/core.mjs';
 
 const created = (id = 'entry-1', mission = 'detail-hunter', rating = 5, repeat = true, note = 'Заметил новый узор') =>
   completeMission(beginMission(emptyState(), mission, '2026-10-03T17:00:00Z'), { rating, repeat, note }, '2026-10-03T17:30:00Z', id);

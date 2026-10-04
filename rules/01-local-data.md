@@ -1,19 +1,19 @@
-# 01 — Local data and truthful compass
+# 01 — Local diary and truthful compass
 
 ## Purpose
 
-Avoid sending personal notes to an unexpected service, erasing existing diary entries during recovery, or presenting fabricated profile metrics.
+Prevent diary uploads, lost records during recovery and fabricated profile metrics.
 
 ## Applies to
 
-Runtime modules in dist; development and hosting credentials are handled separately by the Sites workflow.
+Diary modules public/app.mjs, public/core.mjs and public/data.mjs; chat follows rule 02. Hosting credentials follow Sites.
 
 ## Mandatory rules
 
-- Personal text is escaped before HTML insertion.
-- Backup import validates schema and merges records; it does not clear existing entries.
-- A category with no recorded ratings has no inferred score.
-- Runtime code has no application data network API.
+- Escape personal text before HTML insertion.
+- Validate backup schema and merge records without clearing existing entries.
+- A category without recorded ratings has no inferred score.
+- Diary modules have no application-data network API. The chat module must not read localStorage or receive diary entries/notes.
 
 ## Prohibited patterns
 
@@ -31,16 +31,12 @@ const next = importBackup(state, fileText);
 
 ## Enforcement
 
-Run [scripts/verify.mjs](../scripts/verify.mjs), including [core tests](../tests/core.test.mjs) and [UI event tests](../tests/ui.test.mjs). The checker rejects application network APIs; tests assert safe rendering, invalid-file preservation, merge behaviour and actual-score semantics. No Git hook is installed.
+[scripts/verify.mjs](../scripts/verify.mjs) rejects network calls in diary modules and diary-storage access in friends.mjs. [Core](../tests/core.test.mjs), [UI](../tests/ui.test.mjs) and [social](../tests/social.test.mjs) tests exercise safe rendering, invalid-file preservation, merging, real averages and chat payloads. No Git hook is installed.
 
-Concrete mechanism paths: `scripts/verify.mjs`, `tests/core.test.mjs`, `tests/ui.test.mjs`.
+Concrete mechanism paths: `scripts/verify.mjs`, `tests/core.test.mjs`, `tests/ui.test.mjs`, `tests/social.test.mjs`.
 
-## Exceptions
+## Exceptions and history
 
-A cloud diary or new network capability needs an explicit storage/access decision, an updated rule and appropriate checks before implementation.
+The previous all-runtime no-network constraint was narrowed on 2026-10-04 after the owner requested messaging. That revision permits only the isolated chat API; it does not authorise cloud diary sync. A diary network capability requires a new storage/access decision and checks.
 
-## Related
-
-[Architecture](../docs/architecture.md), [decisions](../docs/decisions.md), [testing](../docs/testing.md).
-
-Review when storage, import or compass contracts change.
+[Architecture](../docs/architecture.md), [decisions](../docs/decisions.md), [testing](../docs/testing.md). Review when storage, import or compass contracts change.

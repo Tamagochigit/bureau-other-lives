@@ -1,13 +1,15 @@
 # Architecture
 
-Use a static shell and browser ES modules to make the first experiment immediately usable without a build toolchain or a model key. [core.mjs](../dist/core.mjs) owns state transitions and strict import validation; [app.mjs](../dist/app.mjs) owns rendering, events and storage; [data.mjs](../dist/data.mjs) owns authored activities.
+The browser shell and authored ES modules live in [public](../public/). [core.mjs](../public/core.mjs) owns diary transitions/import validation, [app.mjs](../public/app.mjs) renders the application and persists the diary, and [data.mjs](../public/data.mjs) owns the catalog. A Sites Vinext Worker now serves the shell and [social route](../app/api/social/[[...path]]/route.ts); the supported starter owns build/hosting integration.
 
-The diary is held in memory and persisted in browser localStorage. On persistence failure, the UI warns that new changes last until the page closes and still permits export. Corrupted original localStorage is left untouched; new session changes stay in memory. This is not encrypted or account-synchronised storage.
+The local diary contract is unchanged: the same storage key and version-1 schema, newer-entry backup merge, preserved retired titles, cross-tab entry merge and visible storage-failure warnings. Corrupted storage is left untouched. Diary notes are not uploaded by chat, linked to a ChatGPT account or synchronised between devices.
 
-Backups merge entries by id, keeping the newer updatedAt, and preserve the current active mission. Record titles survive a retired catalog item. Before persisting a write, UI code merges diary entries already stored by another tab; selections are last-write-wins. The app is not a collaborative editor.
+[friends.mjs](../public/friends.mjs) holds chat UI state and calls only the same-origin social API. It never reads localStorage or the diary state. Sharing sends a catalog mission id and explicitly typed message; the server resolves and stores the catalog title. A receiver chooses whether to open/begin it. Progress and reflections remain independent and private.
 
-No service worker is included. This avoids caching a private hosted HTML response or accidentally caching sign-in redirects; offline reopening is not promised. Manifest and icons support browser home-screen options when the browser exposes them.
+[server/social.mjs](../server/social.mjs) derives the user from Sites-injected identity headers, requires same-origin JSON writes and checks thread membership/block state. SQLite/D1 stores chosen names, opaque Site user ids, hashed one-use invite tokens, friendship/read markers and messages. No email is stored. Invite claiming and friendship creation are atomic; duplicate client ids make network retries idempotent. Message reads and inserts guard access in their SQL as well as the handler. Query parameters and user text are bound, and browser rendering escapes user text.
 
-This design is wrong for multi-user sharing, reliable background reminders or automatic multi-device sync. Add a new storage and access decision before implementing those.
+Site audience and chat friendship are separate boundaries. The Site remains owner-private until named friends receive access; a chat invite does not grant Site access. A signed-in person with Site access can only read their own threads. The public health result contains no user records. This is server-stored messaging, not end-to-end encryption.
 
-Structural facts: [context](../context/application.md). Review when persistence, auth or application module boundaries change.
+No service worker or remote fonts are included. Chat polling runs while the friends view is open and visible; no background delivery/notifications or offline reopening is promised. Drafts are held in tab memory and retained on failed sends, not across closing the tab.
+
+Structural facts: [context](../context/application.md). Review when storage, auth, audience or module boundaries change.

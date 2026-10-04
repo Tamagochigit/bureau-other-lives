@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { STORAGE_KEY, decodeState, backup, emptyState, beginMission, completeMission } from '../dist/core.mjs';
+import { STORAGE_KEY, decodeState, backup, emptyState, beginMission, completeMission } from '../public/core.mjs';
 
 // Lightweight event harness: tests application wiring, not layout or browser compatibility.
 test('the real UI handlers connect selection, progress, reflection, diary and compass', async () => {
@@ -18,14 +18,14 @@ test('the real UI handlers connect selection, progress, reflection, diary and co
   }
   for (const id of ['navigation','settings-icon','page-label','storage-warning','main','toast','detail-dialog','feedback-dialog','dialog-content','feedback-content','backup-file','catalog-results','note-length']) elements.set('#'+id,new Element());
   const body = new Element();
-  globalThis.document = { activeElement:null, body, querySelector:id => { assert.ok(elements.has(id),'Known test element: '+id); return elements.get(id); }, addEventListener:(name,handler) => { events[name]=handler; }, createElement:()=>new Element() };
+  globalThis.document = { activeElement:null, body, querySelector:id => { if(id==='#friends-root')return null;assert.ok(elements.has(id),'Known test element: '+id); return elements.get(id); }, addEventListener:(name,handler) => { events[name]=handler; }, createElement:()=>new Element() };
   globalThis.location={hash:''};
   globalThis.window={scrollTo(){},confirm:()=>true,addEventListener:(name,handler)=>{windowEvents[name]=handler;}};
   globalThis.localStorage={getItem:key=>saved.get(key) || null,setItem:(key,value)=>{if(failStorage) throw new Error('quota');saved.set(key,value);}};
   globalThis.setTimeout=()=>0;
   globalThis.clearTimeout=()=>{};
   globalThis.FormData=class{constructor(form){this.values=form.values;}get(key){return this.values[key] ?? null;}};
-  await import('../dist/app.mjs?ui-test');
+  await import('../public/app.mjs?ui-test');
   assert.match(elements.get('#main').innerHTML,/Что попробуем сегодня/);
   const click = (action,id,extra={}) => events.click({target:{closest:()=>({dataset:{action,id,...extra}})}});
   events.change({target:{id:'home-time',value:'10',matches:()=>false}});

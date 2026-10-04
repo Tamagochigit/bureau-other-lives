@@ -1,8 +1,10 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { MISSIONS, TRADITIONS, CATEGORIES } from '../dist/data.mjs';
-import { STORAGE_KEY, MAX_ENTRIES } from '../dist/core.mjs';
+import { MISSIONS, TRADITIONS, CATEGORIES } from '../public/data.mjs';
+import { STORAGE_KEY, MAX_ENTRIES } from '../public/core.mjs';
 const hosting=JSON.parse(await readFile('.openai/hosting.json','utf8'));
-const app=await readFile('dist/app.mjs','utf8');
+const app=await readFile('public/app.mjs','utf8');
+const schema=await readFile('db/schema.ts','utf8');
+const social=await readFile('server/social.mjs','utf8');
 const homeDefaults=app.match(/const homeFilters = \{ time: '([^']+)', place: '([^']+)' \};/);
 const views=[...(app.match(/const VIEWS = \{(.+)\};/)?.[1] || '').matchAll(/([a-z]+): \[/g)].map(m=>m[1]);
 const content=[
@@ -12,15 +14,19 @@ const content=[
   'Regenerate when application modules, catalog or hosting manifest change.',
   '',
   '- Site project: `'+hosting.project_id+'`',
-  '- Static directory: `'+hosting.static.directory+'`',
+  '- Browser source directory: `public`; hosted Worker with D1 binding `'+hosting.d1+'`',
   '- Storage key: `'+STORAGE_KEY+'`',
   '- Maximum entries: '+MAX_ENTRIES,
   '- Browser views: '+views.join(', '),
+  '- Primary navigation: '+JSON.parse(app.match(/\['home','missions','friends','compass','diary'\]/)?.[0].replaceAll("'",'"') || '[]').join(', '),
   '- Home selection defaults: time '+homeDefaults[1]+' minutes, place '+homeDefaults[2],
   '- Mission count: '+MISSIONS.length,
   '- Tradition count: '+TRADITIONS.length,
   '- Interest categories: '+Object.keys(CATEGORIES).join(', '),
-  '- Runtime dependencies: none; browser ES modules.',
+  '- Browser: authored ES modules; server: Sites Vinext Worker, D1 and schema-only Drizzle migrations.',
+  '- Social tables: '+[...schema.matchAll(/sqliteTable\('([^']+)'/g)].map(m=>m[1]).join(', '),
+  '- Named social endpoints: '+[...social.matchAll(/path\.join\('\/'\)==='([^']+)'/g)].map(m=>m[1]).join(', '),
+  '- Thread actions: '+[...new Set([...social.matchAll(/path\[2\]==='([^']+)'/g)].map(m=>m[1]))].join(', '),
   '',
 ].join('\n');
 await mkdir('context',{recursive:true});

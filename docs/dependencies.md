@@ -1,7 +1,9 @@
 # Dependencies
 
-The shipped runtime has no third-party libraries or remote fonts. Browser APIs and ES modules cover the small state and dialog flows. This removes installation and version drift from the user's first experiment; adding a framework is justified only by a new capability.
+Server messaging justified moving from a purely static Site to the supported Vinext starter. Its pinned lockfile, `sites()` Vite plugin, Worker entry and D1 migration packaging are kept together; hand-building a different runtime would bypass the supported publishing contract.
 
-Development checks use Node built-ins. PNG icons were generated once with Pillow from the exact geometric brand mark; regeneration is unnecessary unless the brand changes. Pillow is not needed to serve or test the app.
+The existing browser interface still uses authored ES modules, native dialogs and same-origin assets, with no remote fonts or model API. Server requests use Web Request/Response APIs and bound D1 statements; Drizzle defines and generates schema-only migrations. React/Vinext and Cloudflare build tooling come from the starter. Actual package versions belong to package.json/package-lock.json, not a copied version list here.
 
-Review when a runtime dependency or icon pipeline changes. See [decision](decisions.md) and [stack](stack.md).
+Tests use Node built-ins, including SQLite on the current Node 24 runtime. PNG icons were generated once with Pillow; it is not a runtime dependency. Chat changes do not regenerate those assets.
+
+Review when dependencies, lockfile, framework integration or migration tooling change. See [decision](decisions.md) and [stack](stack.md).

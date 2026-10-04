@@ -6,7 +6,7 @@ Actor: Codex implementing the user's «Давай создадим прилож�
 
 Why: make the idea concrete so the owner can try one real experience. Static browser-local modules were chosen over native packaging, a framework and a database for the first experiment. The alternatives and reversal conditions are in [decisions](decisions.md).
 
-Now: implementation is in [dist](../dist/). The scoped verification evidence is below; publication result follows the native Sites deployment. Neither browser layout acceptance nor demand validation is claimed.
+Source: initially dist/, now [public](../public/) after the messaging migration. The scoped verification evidence is below; publication result follows the native Sites deployment. Neither browser layout acceptance nor demand validation is claimed.
 
 Observed verification: `node scripts/verify.mjs` exited 0 on 2026-10-04. All 11 tests passed; JS syntax, asset references, linked tradition missions and the local-data boundary passed. Browser screenshots and device acceptance remain unverified.
 
@@ -33,3 +33,15 @@ Observed verification: node scripts/verify.mjs exited 0; all 11 existing tests p
 Knowledge review: strict coverage, wiki consistency, ledger validation, rule conflict/evolution checks and whitespace inspection exited 0. An unaided fresh agent returned PASS for all five anticipated change types and found one stale onboarding premise about absent history. That premise was corrected and its closure recheck returned librarian CLEAR.
 
 Next: owner acceptance on an actual phone. Stale when layout, colour tokens, home selection, storage compatibility or verification evidence changes.
+
+## 2026-10-04 — Git and focused friends messenger
+
+Actor: Codex following the owner's new Git/messenger request, with literal Git and in-app messaging as stated defaults after an unanswered optional clarification. Before: owner-private static Site and local diary. Change: supported Vinext Worker/D1 chat, one-use invite links, personal messages, catalog mission sharing, chosen names, unread counts, blocking and a portable Git history handoff. Browser source moved from dist/ to public/; dist/ is generated output. The diary key/schema, ratings and backup semantics remain unchanged.
+
+Why: actual friend communication requires shared server storage. A local imitation would not meet the request; the supported starter preserves Sites identity/build/migration contracts. Chat friendship does not grant Site access, and no unnamed friend or public audience was added. No external AI, payments, groups, attachments, notifications or diary upload. Risks: server-stored messages are not end-to-end encrypted, drafts are tab-local, and two real account/device acceptance is pending.
+
+Knowledge delta: root/browser/server/db routers; README/Git instructions; architecture, dependencies, product, UX, operations, onboarding, project, R10–R12, decisions/drift, testing, this provenance; revised local-data rule plus chat-access rule; generated application context/brief/wiki; scope ledger. Business wording was updated for explicitly composed friend messages; there is no new monetisation or demand claim. Market and glossary meanings are unchanged. SKILLIFY: Sites already covers the only recurring deployment procedure. MEMOIZE: assumptions and reversals live in decisions; no duplicate memory artifact.
+
+Observed verification: node scripts/verify.mjs exited 0 with 18/18 tests; npm run lint and tsc --noEmit exited 0; the supported Sites build helper exited 0, producing the root and social API Worker routes. Schema-only migrations were generated and inspected, then executed by SQLite tests. Declared colour/font checks exited 0: body 18 px, smallest declaration 14 px, main contrast 14.66:1 and secondary 7.74:1. Strict coverage, wiki consistency, ledger and rule checks exited 0. A fresh knowledge-only agent returned PASS for five anticipated change types; it found stale business/stack claims and a missing incoming wiki link. Those claims, category labels and routing were corrected; the closure recheck returned librarian CLEAR. All 43 knowledge files were reachable from the root router and 190 local links resolved; the review read knowledge only, not code or a browser. Deployment/Git bundle are not claimed complete before native results.
+
+Review when identity, SQL access, retries, migrations, audience, UI or build profile changes. Recovery: [operations](operations.md).
