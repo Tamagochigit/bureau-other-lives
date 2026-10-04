@@ -1,0 +1,17 @@
+# Architecture
+
+The browser shell and authored ES modules live in [public](../public/). [core.mjs](../public/core.mjs) owns diary transitions/import validation, [app.mjs](../public/app.mjs) renders the application and persists the diary, and [data.mjs](../public/data.mjs) owns the catalog. A Sites Vinext Worker now serves the shell and [social route](../app/api/social/[[...path]]/route.ts); the supported starter owns build/hosting integration.
+
+The local diary contract is unchanged: the same storage key and version-1 schema, newer-entry backup merge, preserved retired titles, cross-tab entry merge and visible storage-failure warnings. Corrupted storage is left untouched. Diary notes are not uploaded by chat, linked to a ChatGPT account or synchronised between devices.
+
+[friends.mjs](../public/friends.mjs) selects its controller from [runtime config](../public/runtime-config.mjs). On the protected Worker it holds chat UI state and calls only the same-origin social API. On Pages, [hosted-friends.mjs](../public/hosted-friends.mjs) renders an explicit protected-chat link and performs no API calls. Neither controller reads localStorage or diary state. [links.mjs](../public/links.mjs) allowlists mission ids and invitation token format with fixed deployment destinations. Sharing sends a catalog mission id and explicitly typed message; the server resolves and stores the catalog title. A receiver opens the main frontend's mission instructions and chooses whether to begin it. Progress and reflections remain independent and private.
+
+[server/social.mjs](../server/social.mjs) derives the user from Sites-injected identity headers, requires same-origin JSON writes and checks thread membership/block state. SQLite/D1 stores chosen names, opaque Site user ids, hashed one-use invite tokens, friendship/read markers and messages. No email is stored. Invite claiming and friendship creation are atomic; duplicate client ids make network retries idempotent. Message reads and inserts guard access in their SQL as well as the handler. Query parameters and user text are bound, and browser rendering escapes user text.
+
+Site audience and chat friendship are separate boundaries. The Site remains owner-private until named friends receive access; a chat invite does not grant Site access. A signed-in person with Site access can only read their own threads. The public health result contains no user records. This is server-stored messaging, not end-to-end encryption.
+
+The main browser interface is published on GitHub Pages with an explicit asset whitelist. [build-pages.mjs](../scripts/build-pages.mjs) copies authored modules as .js and rewrites their relative imports so module MIME and the repository subpath work without a framework build. It overrides only public runtime mode/addresses; no server binding or credential enters the static artifact. The source repository includes the backend; Pages does not execute it. Local diary schema/key remain compatible, while each origin has independent browser storage. Export/import is the transfer path.
+
+No service worker or remote fonts are included. Chat polling runs while the friends view is open and visible; no background delivery/notifications or offline reopening is promised. Drafts are held in tab memory and retained on failed sends, not across closing the tab.
+
+Structural facts: [context](../context/application.md). Review when storage, auth, audience or module boundaries change.
