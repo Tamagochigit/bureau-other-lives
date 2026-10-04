@@ -2,6 +2,10 @@
 
 Run `node scripts/verify.mjs` once after the coherent implementation batch. It checks JS syntax, core, UI-event and SQLite/social tests, declared asset paths, tradition-to-mission links and the diary network boundary.
 
+[Pages tests](../tests/pages.test.mjs) build the real static artifact, resolve every import/HTML/manifest asset below the repository path, reject arbitrary mission/invitation destinations, check escaped shared-card links, and execute the built application with a lightweight event harness. A shared mission opens instructions without changing the existing diary; Pages friends/share makes no API calls and includes no private note; invalid deep links do not open a mission. The old-address transfer instruction is checked. These prove asset/event/privacy behavior, not browser layout or a signed-in conversation. CI repeats application verification on a fresh Node 24 runner and publishes only after success.
+
+Migration local results: 21/21 tests passed across the initial suite and the targeted fixture-fix rerun. Remaining verify checks, lint, TypeScript, Pages build and supported Worker build exited 0. Strict knowledge coverage and fresh librarian/newcomer closure passed. Source/publication receipts live in change provenance; no signed-in browser/device acceptance is inferred from these checks.
+
 [Core tests](../tests/core.test.mjs) cover persistence round trips, partial progress, required ratings, combined filters, surprise choice, truthful compass averages, backup idempotence/newer edits, malformed input rejection, safe personal text and retired mission titles.
 
 [UI event tests](../tests/ui.test.mjs) execute the real application module with a lightweight DOM/event harness. They cover home time/place selection → mission, selection → progress → feedback → diary → compass, favourites, tradition selection, concurrent diary preservation and visible storage failure. They do not prove visual layout, CSS sizing, actual browser dialog behaviour or installability.

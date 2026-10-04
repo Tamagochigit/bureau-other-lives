@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { MISSIONS, TRADITIONS, CATEGORIES } from '../public/data.mjs';
 import { STORAGE_KEY, MAX_ENTRIES } from '../public/core.mjs';
+import { FRONTEND_URL, CHAT_SERVICE_URL } from '../public/runtime-config.mjs';
 const hosting=JSON.parse(await readFile('.openai/hosting.json','utf8'));
 const app=await readFile('public/app.mjs','utf8');
 const schema=await readFile('db/schema.ts','utf8');
@@ -15,6 +16,9 @@ const content=[
   '',
   '- Site project: `'+hosting.project_id+'`',
   '- Browser source directory: `public`; hosted Worker with D1 binding `'+hosting.d1+'`',
+  '- Main static frontend: '+FRONTEND_URL+'; Node-only build: `scripts/build-pages.mjs`; output: `out/pages`',
+  '- Protected chat server: '+CHAT_SERVICE_URL+'; frontend navigation uses catalog/invite allowlists in links.mjs',
+  '- GitHub publication: `.github/workflows/pages.yml`; one-time complete history import: `.github/workflows/import.yml`',
   '- Storage key: `'+STORAGE_KEY+'`',
   '- Maximum entries: '+MAX_ENTRIES,
   '- Browser views: '+views.join(', '),

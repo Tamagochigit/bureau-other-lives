@@ -20,4 +20,4 @@ Owner: Неплохо бы сделать гит, мессенджер друз�
 
 ## Acceptance
 
-R10–R12 in docs/requirements.md. Literal Git and in-app messenger are stated defaults. No friend address or public audience requested.
+R10–R12 in docs/requirements.md. Literal Git and in-app messenger were the stated defaults for the initial request. The later GitHub clarification and public frontend migration are recorded in R13–R14 and github-project-and-pages.md. No friend address or expansion of the protected chat audience has been requested.

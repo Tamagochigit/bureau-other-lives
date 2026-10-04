@@ -1,0 +1,41 @@
+name: Import complete Site history
+
+# One-time migration. The bundle exists only in the GitHub bootstrap commit.
+# After import, this workflow stops because migration/site.bundle is absent.
+on:
+  workflow_dispatch:
+    inputs:
+      source_commit:
+        description: Exact source commit in the verified Git bundle
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Import without rewriting existing history
+        env:
+          EXPECTED_SOURCE: ${{ inputs.source_commit }}
+        run: |
+          set -euo pipefail
+          test -f migration/site.bundle
+          [[ "$EXPECTED_SOURCE" =~ ^[0-9a-f]{40}$ ]]
+          git bundle verify migration/site.bundle
+          git fetch migration/site.bundle refs/heads/main:refs/remotes/site/main
+          SOURCE=$(git rev-parse refs/remotes/site/main)
+          test "$SOURCE" = "$EXPECTED_SOURCE"
+          # Preserve the source's exact tree and every original commit SHA.
+          # A merge parent keeps the GitHub bootstrap history as well.
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          IMPORTED=$(git commit-tree "$SOURCE^{tree}" -p "$GITHUB_SHA" -p "$SOURCE" -m 'Import complete Site source and history')
+          # Ordinary fast-forward push: concurrent user changes cause a failure.
+          git push origin "$IMPORTED:refs/heads/main"
+          echo "Imported source commit: $SOURCE" >> "$GITHUB_STEP_SUMMARY"
+          echo "GitHub main commit: $IMPORTED" >> "$GITHUB_STEP_SUMMARY"

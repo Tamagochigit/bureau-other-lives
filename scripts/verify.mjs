@@ -6,8 +6,8 @@ const run = args => {
   const result = spawnSync(process.execPath,args,{stdio:'inherit'});
   if (result.status !== 0) process.exit(result.status || 1);
 };
-for (const file of ['public/app.mjs','public/core.mjs','public/data.mjs','public/friends.mjs','server/social.mjs']) run(['--check',file]);
-run(['--test','--test-concurrency=1','tests/core.test.mjs','tests/ui.test.mjs','tests/social.test.mjs']);
+for (const file of ['public/app.mjs','public/core.mjs','public/data.mjs','public/friends.mjs','public/hosted-friends.mjs','public/links.mjs','public/runtime-config.mjs','scripts/build-pages.mjs','server/social.mjs']) run(['--check',file]);
+run(['--test','--test-concurrency=1','tests/core.test.mjs','tests/ui.test.mjs','tests/social.test.mjs','tests/pages.test.mjs']);
 const html=await readFile('public/index.html','utf8');
 for (const match of html.matchAll(/(?:src|href)="\.\/([^"#]+)"/g)) await stat('public/'+match[1]);
 const manifest=JSON.parse(await readFile('public/manifest.webmanifest','utf8'));

@@ -1,13 +1,17 @@
 import { MISSIONS } from './data.mjs';
 import { escapeHtml as e } from './core.mjs';
+import { DEPLOYMENT_MODE } from './runtime-config.mjs';
+import { createHostedFriendsController } from './hosted-friends.mjs';
+import { incomingLinks, missionLink } from './links.mjs';
 
 const dateTime=value=>new Date(value).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
 export function renderMessages(messages,friendName) {
-  return messages.map(m=>`<article class="chat-message ${m.mine?'mine':''}"><div class="chat-message-meta">${e(m.mine?'Ты':friendName)} · <time datetime="${e(new Date(m.createdAt).toISOString())}">${e(dateTime(m.createdAt))}</time></div>${m.body?'<p>'+e(m.body)+'</p>':''}${m.missionId?'<div class="chat-shared">'+(MISSIONS.some(x=>x.id===m.missionId)?'<button class="text-button" data-action="mission" data-id="'+e(m.missionId)+'">'+e(m.missionTitle)+' — открыть миссию</button>':'<p>'+e(m.missionTitle)+'</p>')+'</div>':''}</article>`).join('');
+  return messages.map(m=>`<article class="chat-message ${m.mine?'mine':''}"><div class="chat-message-meta">${e(m.mine?'Ты':friendName)} · <time datetime="${e(new Date(m.createdAt).toISOString())}">${e(dateTime(m.createdAt))}</time></div>${m.body?'<p>'+e(m.body)+'</p>':''}${m.missionId?'<div class="chat-shared">'+(missionLink(m.missionId)?'<a class="text-button" href="'+e(missionLink(m.missionId))+'">'+e(m.missionTitle)+' — открыть миссию</a>':'<p>'+e(m.missionTitle)+'</p>')+'</div>':''}</article>`).join('');
 }
 export function createFriendsController({toast}) {
+  if (DEPLOYMENT_MODE === 'pages') return createHostedFriendsController();
   let active=false, profile=null, contacts=[], selected=null, messages=[], loading=false, sending=false, error='', authError=false, inviteUrl='', pendingMission=null, olderAvailable=false, timer=null;
-  let joinToken=new URLSearchParams(location.search || '').get('join') || '', inviter='';
+  let joinToken=incomingLinks(location.search || '').join, inviter='';
   const drafts=new Map(),attempts=new Map();
   const root=()=>document.querySelector('#friends-root');
   const friend=()=>contacts.find(c=>c.id===selected);
@@ -27,7 +31,7 @@ export function createFriendsController({toast}) {
   function failure(err) {error=err.message || 'Нет связи с чатом. Попробуй ещё раз.';authError=err.status===401;}
   function capture() {const field=root()?.querySelector('#chat-message');if(field?.dataset.thread)drafts.set(field.dataset.thread,field.value);}
   function merge(next) {const items=new Map(messages.map(m=>[m.seq,m]));for(const m of next)items.set(m.seq,m);messages=[...items.values()].sort((a,b)=>a.seq-b.seq);}
-  function signInLink() {const returnTo='/?'+(joinToken?'join='+encodeURIComponent(joinToken):'')+'#friends';return '/signin-with-chatgpt?return_to='+encodeURIComponent(returnTo);}
+  function signInLink() {const params=new URLSearchParams();if(joinToken)params.set('join',joinToken);if(pendingMission)params.set('offer',pendingMission.id);const returnTo='/?'+params+'#friends';return '/signin-with-chatgpt?return_to='+encodeURIComponent(returnTo);}
   function clearJoin() {joinToken='';inviter='';const url=new URL(location.href);url.searchParams.delete('join');history.replaceState(null,'',url.pathname+url.search+url.hash);}
   function statusContent() {return error?'<p>'+e(error)+'</p>'+(authError?'<a class="button button-dark" href="'+e(signInLink())+'" target="_top">Войти через ChatGPT</a>':'<button class="text-button" data-action="chat-retry">Повторить</button>'):'';}
   function status() {return `<div class="chat-status" id="chat-status" role="status">${statusContent()}</div>`;}

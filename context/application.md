@@ -5,6 +5,9 @@ Regenerate when application modules, catalog or hosting manifest change.
 
 - Site project: `appgprj_6ac16ee51ba481918f48206449ed68f3`
 - Browser source directory: `public`; hosted Worker with D1 binding `DB`
+- Main static frontend: https://tamagochigit.github.io/bureau-other-lives/; Node-only build: `scripts/build-pages.mjs`; output: `out/pages`
+- Protected chat server: https://bureau-of-other-lives.neurozona.chatgpt.site/; frontend navigation uses catalog/invite allowlists in links.mjs
+- GitHub publication: `.github/workflows/pages.yml`; one-time complete history import: `.github/workflows/import.yml`
 - Storage key: `other-lives:state:v1`
 - Maximum entries: 5000
 - Browser views: home, missions, traditions, compass, diary, friends

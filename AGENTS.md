@@ -4,6 +4,7 @@ Use Akinator for repository changes when available. Keep code and its knowledge 
 
 - [Product and acceptance](docs/product.md).
 - [Project overview and Git handoff](README.md).
+- [Pages / protected chat deployment split](docs/operations.md) and [frontend boundary](rules/03-pages-boundary.md).
 - [Readability and scope](docs/ux.md) — start here before changing the interface.
 - [Knowledge index](docs/README.md), including requirements, decisions, operations and testing.
 - [Diary and chat access rules](rules/README.md).

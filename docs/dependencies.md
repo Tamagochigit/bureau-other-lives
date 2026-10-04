@@ -6,4 +6,6 @@ The existing browser interface still uses authored ES modules, native dialogs an
 
 Tests use Node built-ins, including SQLite on the current Node 24 runtime. PNG icons were generated once with Pillow; it is not a runtime dependency. Chat changes do not regenerate those assets.
 
+GitHub Pages adds no runtime package. Its static build and CI verification use Node built-ins only; npm installation is still required for Worker build/lint/typecheck. GitHub's maintained checkout/setup-node and Pages actions handle source/artifact/deployment. The existing starter dependency set and lockfile remain unchanged by this migration.
+
 Review when dependencies, lockfile, framework integration or migration tooling change. See [decision](decisions.md) and [stack](stack.md).

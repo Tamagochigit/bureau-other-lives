@@ -9,3 +9,5 @@ Future reversals of platform, storage or compass semantics must be appended here
 Review when an intended direction changes. See [requirements](requirements.md) and [decisions](decisions.md).
 
 2026-10-04 — New owner scope: add Git and friends messaging. Before: a static personal application with no data API. After: supported Worker/D1 chat, preserved local diary and same private audience. Shared message storage activates the earlier framework/backend reversal condition. No pricing, public access or cloud diary promise is introduced. Sources: R10–R12 and the new [decision](decisions.md).
+
+2026-10-04 — Owner clarified GitHub and created a public repository. The main frontend/source move to GitHub/Pages; the chat runtime remains the existing private Worker/D1. This supersedes the earlier unspecified external Git target and private-only frontend default, without changing the protected chat audience or granting friends access. R10/R13–R14 and the [migration decision](decisions.md) own the scope. No multi-device diary sync or full backend hosting on Pages is claimed.

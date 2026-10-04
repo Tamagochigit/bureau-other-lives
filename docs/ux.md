@@ -15,3 +15,5 @@ No layout screenshots were available in this environment. Responsive CSS exists 
 Review when core flow, layout, contrast or accessibility behaviour changes. Code: [HTML](../public/index.html), [styles](../public/style.css), [events](../public/app.mjs).
 
 The friends view begins with an invitation action and conversation list. Names/messages inherit large dark body text; timestamps and hints remain 16 px. A chosen conversation has a labeled message field and one send action; block options are in a native disclosure. Drafts remain per friend in tab memory and are retained after network failure; idempotent retries avoid duplicate messages. No images, feed or online-status widgets were added.
+
+On Pages, the friends view instead has one prominent «Открыть личные чаты» action, a brief sign-in/access explanation and the selected mission when relevant. The protected chat view keeps the conversation UI and a return-to-main-site link. A forwarded mission is prepared, never sent automatically. Settings explain the old-address diary export and new-address restore; the home start and typography stay unchanged.
