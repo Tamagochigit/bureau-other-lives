@@ -30,6 +30,8 @@ cd android
 
 Gradle 8.13 is checked by its distribution SHA-256; AGP is pinned to 8.13.2. Resolved dependencies are locked in app/gradle.lockfile and verified by gradle/verification-metadata.xml; updates require reviewing regenerated inputs. AndroidX Activity supplies the modern Back dispatcher. The assets directory is generated; rebuild it after every browser change. CI builds the unsigned release and does not hold a private key. Its unsigned artifact cannot be installed until signed. The debug build is a separate package for tests, not an update to the pilot.
 
+SDK setup explicitly requests only `platform-tools`; the action supplies command-line tools separately. Do not restore its old implicit `tools` package, which Google no longer serves. The first CI attempt failed in SDK setup before compiling; the narrow workflow correction changes no APK bytes. [Action documentation](https://github.com/android-actions/setup-android/blob/main/README.md), [testing evidence](testing.md).
+
 Keep the product signing key and its passwords outside Git. The private recovery archive created for this pilot is necessary for compatible future updates; never publish it. Release signing accepts passwords from files, not shell arguments:
 
 ```bash
