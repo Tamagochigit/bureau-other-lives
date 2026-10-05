@@ -2,41 +2,26 @@
 
 ## Purpose
 
-Prevent diary uploads, lost records during recovery and fabricated profile metrics.
+Prevent diary uploads, lost recovery records and fabricated profile metrics.
 
 ## Applies to
 
-Diary modules public/app.mjs, public/core.mjs and public/data.mjs; chat follows rule 02. Hosting credentials follow Sites.
+public/app.mjs, public/core.mjs and public/data.mjs; contacts/messenger links follow rule 02.
 
 ## Mandatory rules
 
 - Escape personal text before HTML insertion.
-- Validate backup schema and merge records without clearing existing entries.
+- Validate backup schema and merge records without clearing current entries.
 - A category without recorded ratings has no inferred score.
-- Diary modules have no application-data network API. The chat module must not read localStorage or receive diary entries/notes.
-
-## Prohibited patterns
-
-```js
-element.innerHTML = entry.note;
-state.entries = JSON.parse(file).entries;
-```
-
-## Correct pattern
-
-```js
-element.innerHTML = escapeHtml(entry.note);
-const next = importBackup(state, fileText);
-```
+- All application state stays local. No browser application-data network API is authorised.
+- Contacts/friends/links cannot read diary state or receive notes/entries. Only an explicitly selected public catalog id may be shared.
 
 ## Enforcement
 
-[scripts/verify.mjs](../scripts/verify.mjs) rejects network calls in diary modules and diary-storage access in friends.mjs. [Core](../tests/core.test.mjs), [UI](../tests/ui.test.mjs) and [social](../tests/social.test.mjs) tests exercise safe rendering, invalid-file preservation, merging, real averages and chat payloads. No Git hook is installed.
+Mechanisms: `scripts/verify.mjs`, `tests/core.test.mjs`, `tests/ui.test.mjs`, `tests/contacts.test.mjs`, `tests/pages.test.mjs`.
 
-Concrete mechanism paths: `scripts/verify.mjs`, `tests/core.test.mjs`, `tests/ui.test.mjs`, `tests/social.test.mjs`.
+The verifier prohibits network calls and diary-state imports in messenger modules. Tests exercise invalid-input preservation, merge integrity, known averages, escaped text, separate contact keys and no diary leakage in the assembled sharing flow. No Git hook.
 
-## Exceptions and history
+## History
 
-The previous all-runtime no-network constraint was narrowed on 2026-10-04 after the owner requested messaging. That revision permits only the isolated chat API; it does not authorise cloud diary sync. A diary network capability requires a new storage/access decision and checks.
-
-[Architecture](../docs/architecture.md), [decisions](../docs/decisions.md), [testing](../docs/testing.md). Review when storage, import or compass contracts change.
+The first all-runtime no-network boundary was narrowed on 2026-10-04 for an isolated custom chat API. The owner retired that backend on 2026-10-05; the current product again has no application-data network API. A future upload requires a new storage/access decision and meaningful checks. [Architecture](../docs/architecture.md), [decisions](../docs/decisions.md). Review when storage, import or compass changes.

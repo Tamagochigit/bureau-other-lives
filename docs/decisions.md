@@ -1,5 +1,7 @@
 # Decisions
 
+Dated earlier sections describe superseded releases. The 2026-10-05 standalone decision below governs current runtime.
+
 ## 2026-10-04 — First format
 
 User chose web over Android APK in the optional format question. A responsive static application is the quickest reviewable implementation and works without installing an APK. Revisit when the user requests native Android capabilities.
@@ -41,3 +43,15 @@ The owner clarified GitHub, created the public Tamagochigit/bureau-other-lives r
 An ordinary navigation link connects Pages to protected chat. Only a catalog mission id and a validated invitation token cross it; no diary note, bearer, CORS bridge or automatic send is introduced. Received mission cards point to the main frontend; an incoming mission opens its instructions and does not begin/replace an active experience. The old diary remains on its origin; explicit backup export/import makes the domain transfer reviewable and avoids pretending cross-origin storage follows automatically.
 
 Alternative Git API imports recreate commits and change their SHA/author/date. A verified Git bundle and one-time Actions import preserve original objects, adding one merge commit with the GitHub bootstrap parent. An ordinary fast-forward push fails on concurrent repository changes. The import uses the runner's short-lived GITHUB_TOKEN, not a stored personal token. Subsequent Pages builds use read-only source permission and deployment-only Pages permissions. Revisit if branch protection or host policy blocks the one-time import; never discard unrelated history to repair it.
+
+## 2026-10-05 — Standalone GitHub product, surprise and an existing messenger
+
+Owner: «главный экран, который удиви меня лучше ... выбор по времени не надо», «не создавая свой мессенджер» and «полностью убрать ChatGPT ... отдельный продукт на гитхаб». This overrides the previously assumed home selector and retained platform chat server. One unfiltered home surprise with visible active progress replaces the form; catalog filtering remains optional. Browsing never replaces progress.
+
+Choose local shortcuts to Telegram and its official username/draft/share links. The optional external-versus-embedded question returned no answer; this is the stated working default. [Telegram public username links](https://core.telegram.org/api/links#public-username-links) accept optional draft text; [sharing](https://core.telegram.org/widgets/share) lets the user choose a chat and edit/send. Only catalog title/id/link enters that draft. No user message was sent during development.
+
+Alternatives considered: embedding [Converse/XMPP](https://conversejs.org/docs/quickstart/) requires provider accounts and a working production WebSocket/BOSH endpoint; Matrix likewise needs service/account onboarding. A test/demo endpoint is unsuitable for production. Telegram's [documented widgets](https://core.telegram.org/widgets) are not a ready private-conversation iframe. A custom backend would repeat the rejected messenger work. Revisit if the owner requires conversations inside this site and selects a verified provider/account flow.
+
+Remove the former framework/auth/database/connector starter, custom chat code, generated schema and import-only workflow from current main. package.json/lock now have no dependencies; Node built-ins verify/build/preview. Keep the complete original Git history and unchanged diary v1/backup. Legacy hosted data/deployment are not destroyed or migrated; current runtime has no link to them. Contacts use a separate browser-local key, bounded names/usernames and no identity-verification claim. No friend address, platform login, bot, new paid service or cloud diary is required.
+
+Risks/limits: a contact's handle may be wrong or no longer owned by the intended person; Telegram resolves it and the user checks the recipient. Real client draft behaviour/availability and delivery need manual acceptance. Local storage can be cleared; diary backup excludes contacts. Full messenger embedding and contact/diary sync remain separate scope. Revisit when Telegram contracts, provider/account requirements, storage, host or owner intent change. R15–R16 and revised R09/R11–R14 own acceptance; operations and tests own proof.

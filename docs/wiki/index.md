@@ -37,7 +37,7 @@ parallel one.
 | Decisions | the decision log - the ADR index | [docs/decisions/](../decisions/) (adopted) | 1 | 0 |
 | Changes | one change record per meaningful change - before, change, now, why | [docs/changes/](../changes/) (adopted) | 1 | 0 |
 | Glossary | terms - the domain words a newcomer meets, and what each means here | [docs/glossary.md](../glossary.md) (adopted) | 1 | 0 |
-| Onboarding | how a newcomer, or a fresh agent, gets productive | [docs/onboarding.md](../onboarding.md) (adopted); also [README.md (section: Development)](../../README.md#development) | 2 | 0 |
+| Onboarding | how a newcomer, or a fresh agent, gets productive | [docs/onboarding.md](../onboarding.md) (adopted) | 1 | 0 |
 
 **Open gaps: 0.** A category with no home, or with a home
 that holds no page, counts as one gap; so does every line that is

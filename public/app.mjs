@@ -1,6 +1,5 @@
 import { createFriendsController } from './friends.mjs';
 import { incomingLinks } from './links.mjs';
-import { DEPLOYMENT_MODE, FRONTEND_URL, CHAT_SERVICE_URL } from './runtime-config.mjs';
 import { MISSIONS, TRADITIONS, CATEGORIES, PLACES } from './data.mjs';
 import { STORAGE_KEY, emptyState, decodeState, beginMission, toggleStep, completeMission, editEntry, toggleId, filterMissions, surpriseMission, compass, backup, importBackup, escapeHtml } from './core.mjs';
 
@@ -37,13 +36,10 @@ try { const saved = localStorage.getItem(STORAGE_KEY); if (saved) state = decode
 const VIEWS = { home: ['Сегодня', 'home'], missions: ['Миссии', 'compass'], traditions: ['Традиции', 'people'], compass: ['Компас', 'spark'], diary: ['Дневник', 'book'], friends: ['Друзья', 'people'] };
 let view = Object.hasOwn(VIEWS, location.hash.slice(1)) ? location.hash.slice(1) : 'home';
 let filters = { time: '', place: '', category: '', search: '', onlyFavorites: false };
-const homeFilters = { time: '15', place: 'home' };
 let feedbackEntryId = null, returnFocus = null, installPrompt = null;
 let toastTimer;
 const friends = createFriendsController({toast});
 const incoming = incomingLinks(location.search || '');
-if(incoming.offer)friends.prepareMission(incoming.offer);
-if(friends.hasInvite() || incoming.offer){view='friends';location.hash='friends';}
 function toast(message) { $('#toast').textContent = message; $('#toast').classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('#toast').classList.remove('visible'), 4200); }
 function storeState(next) {
   if (storageWritable) {
@@ -86,15 +82,9 @@ function intro(_kicker, title, subtitle, extra = '') {
   return `<section class="page-heading"><div><h1>${title}</h1><p>${subtitle}</p></div>${extra}</section>`;
 }
 function homePage() {
-  if (state.active) return `${intro('', 'Продолжим?', 'Твоя начатая миссия — здесь.')}${activeBanner()}<button class="text-button" data-action="navigate" data-view="missions">Выбрать другую миссию ${icon('arrow')}</button>`;
-  return `${intro('', 'Что попробуем сегодня?', 'Небольшой опыт, который можно попробовать прямо сейчас.')}
-    <section class="home-start" aria-label="Подобрать миссию">
-      <div class="home-filters">
-        <label class="select-field" for="home-time"><span>Сколько времени?</span><select id="home-time">${[10,15,30,60].map(time => '<option value="' + time + '"' + (homeFilters.time === String(time) ? ' selected' : '') + '>До ' + time + ' минут</option>').join('')}</select></label>
-        <label class="select-field" for="home-place"><span>Где?</span><select id="home-place">${Object.entries(PLACES).map(([id,label]) => '<option value="' + id + '"' + (homeFilters.place === id ? ' selected' : '') + '>' + label + '</option>').join('')}</select></label>
-      </div>
-      <button class="button button-orange home-pick" data-action="surprise">Подобрать миссию ${icon('arrow')}</button>
-    </section>
+  return `${intro('', 'Что попробуем сегодня?', 'Одна неожиданная роль. Три простых шага. Новый опыт.')}
+    <section class="home-start" aria-label="Случайная миссия"><button class="button button-orange home-pick" data-action="surprise">${icon('shuffle')} Удиви меня</button></section>
+    ${activeBanner()}
     <button class="text-button" data-action="navigate" data-view="missions">Выбрать самому ${icon('arrow')}</button>`;
 }
 function missionsPage() {
@@ -132,9 +122,8 @@ function diaryPage() {
     ${!state.entries.length ? '<section class="empty-state diary-empty"><h2>Пока нет записей.</h2><p>Попробуй миссию и сохрани впечатление.</p><button class="button button-orange" data-action="navigate" data-view="missions">Найти первую роль ' + icon('arrow') + '</button></section>' : '<div class="diary-count">Сохранено опытов: ' + state.entries.length + '</div><div class="diary-list">' + state.entries.map(entry => '<article class="diary-entry"><div class="diary-date"><strong>' + new Date(entry.completedAt).getDate() + '</strong><span>' + new Date(entry.completedAt).toLocaleDateString('ru-RU', {month:'short',year:'numeric'}) + '</span></div><div class="entry-content">' + tag(entry.category) + '<h2>' + e(entry.title) + '</h2><p class="entry-note">' + e(entry.note || 'Впечатление сохранено. Можно добавить пару слов о нём.') + '</p><div class="entry-bottom"><span class="entry-rating">' + icon('spark') + ' ' + entry.rating + ' / 5</span>' + (entry.repeat ? '<span class="repeat-badge">' + icon('heart') + ' Хочется повторить</span>' : '') + '<button class="text-button" data-action="edit-entry" data-id="' + entry.id + '">Изменить запись ' + icon('pen') + '</button></div></div></article>').join('') + '</div>'}
     <p class="privacy-note">${icon('book')} Записи хранятся в этом браузере. Резервная копия поможет перенести их на другое устройство.</p>`;
 }
-function friendsPage() { return intro('', 'Друзья', 'Личные разговоры и миссии, которые хочется попробовать вместе.') + friends.page() + (DEPLOYMENT_MODE === 'worker' ? `<p class="privacy-note"><a href="${e(FRONTEND_URL)}">Вернуться на основной сайт</a></p>` : ''); }
+function friendsPage() { return intro('', 'Друзья', 'Напиши другу или предложи миссию в Telegram.') + friends.page(); }
 function render() {
-  friends.leave();
   $('#navigation').innerHTML = ['home','missions','friends','compass','diary'].map(id => [id,VIEWS[id]]).map(([id,[label,name]]) => `<a href="#${id}" class="nav-item ${id === view ? 'active' : ''}" ${id === view ? 'aria-current="page"' : ''}>${icon(name)}<span>${label}</span></a>`).join('');
   $('#settings-icon').innerHTML = icon('settings');
   $('#page-label').textContent = view === 'home' ? 'Бюро других жизней' : VIEWS[view][0];
@@ -142,7 +131,6 @@ function render() {
   if (!storageWritable) warning.innerHTML = e(storageMessage) + ' Новые изменения доступны до закрытия страницы. <button class="text-button" data-action="export">Выгрузить копию</button>';
   const pages = { home: homePage, missions: missionsPage, traditions: traditionsPage, compass: compassPage, diary: diaryPage, friends: friendsPage };
   $('#main').innerHTML = pages[view]();
-  if(view==='friends')friends.mount();
 }
 function openDialog(dialog) {
   returnFocus = document.activeElement;
@@ -154,7 +142,7 @@ function showMission(id) {
   const mission = MISSIONS.find(m => m.id === id); if (!mission) return;
   const active = state.active?.missionId === id;
   const saved = state.favorites.includes(id);
-  $('#dialog-content').innerHTML = `<button class="modal-close icon-button" data-action="close-detail" aria-label="Закрыть миссию">${icon('close')}</button><div class="detail-body">${tag(mission.category)}<h2 id="dialog-title">${e(mission.title)}</h2><p class="detail-subtitle">${e(mission.subtitle)}</p><div class="detail-metadata"><span>${icon('clock')}${mission.minutes} минут</span><span>${icon('pin')}${mission.places.map(p => PLACES[p]).join(' / ')}</span></div><div class="materials"><span class="eyebrow">Что понадобится</span><p>${e(mission.materials)}</p></div><h3 class="detail-section-title">${active ? 'Твои шаги' : 'Три простых шага'}</h3><ol class="mission-steps">${mission.steps.map((step,index) => active ? '<li class="' + (state.active.completedSteps.includes(index) ? 'step-done' : '') + '"><label><input type="checkbox" data-step="' + index + '" ' + (state.active.completedSteps.includes(index) ? 'checked' : '') + '><span>' + e(step) + '</span></label></li>' : '<li><span class="step-index">0' + (index+1) + '</span><p>' + e(step) + '</p></li>').join('')}</ol><div class="mission-result">${icon('spark')}<div><span class="eyebrow">Что останется</span><p>${e(mission.result)}</p></div></div><div class="detail-buttons">${active ? '<button class="button button-orange" data-action="feedback">Сохранить впечатление ' + icon('arrow') + '</button><button class="text-button" data-action="cancel-mission">Отложить миссию</button>' : '<button class="button button-orange" data-action="begin" data-id="' + id + '">Примерить эту роль ' + icon('arrow') + '</button><button class="button button-outline" data-action="favorite-detail" data-id="' + id + '" aria-pressed="' + saved + '">' + icon(saved ? 'check' : 'bookmark') + (saved ? 'Сохранено' : 'На потом') + '</button>'}</div><button class="text-button" data-action="chat-share" data-id="${mission.id}">Предложить другу ${icon('people')}</button><p class="detail-footnote">Можно менять шаги под себя и идти в своём темпе.</p></div>`;
+  $('#dialog-content').innerHTML = `<button class="modal-close icon-button" data-action="close-detail" aria-label="Закрыть миссию">${icon('close')}</button><div class="detail-body">${tag(mission.category)}<h2 id="dialog-title">${e(mission.title)}</h2><p class="detail-subtitle">${e(mission.subtitle)}</p><div class="detail-metadata"><span>${icon('clock')}${mission.minutes} минут</span><span>${icon('pin')}${mission.places.map(p => PLACES[p]).join(' / ')}</span></div><div class="materials"><span class="eyebrow">Что понадобится</span><p>${e(mission.materials)}</p></div><h3 class="detail-section-title">${active ? 'Твои шаги' : 'Три простых шага'}</h3><ol class="mission-steps">${mission.steps.map((step,index) => active ? '<li class="' + (state.active.completedSteps.includes(index) ? 'step-done' : '') + '"><label><input type="checkbox" data-step="' + index + '" ' + (state.active.completedSteps.includes(index) ? 'checked' : '') + '><span>' + e(step) + '</span></label></li>' : '<li><span class="step-index">0' + (index+1) + '</span><p>' + e(step) + '</p></li>').join('')}</ol><div class="mission-result">${icon('spark')}<div><span class="eyebrow">Что останется</span><p>${e(mission.result)}</p></div></div><div class="detail-buttons">${active ? '<button class="button button-orange" data-action="feedback">Сохранить впечатление ' + icon('arrow') + '</button><button class="text-button" data-action="cancel-mission">Отложить миссию</button>' : '<button class="button button-orange" data-action="begin" data-id="' + id + '">Примерить эту роль ' + icon('arrow') + '</button><button class="button button-outline" data-action="favorite-detail" data-id="' + id + '" aria-pressed="' + saved + '">' + icon(saved ? 'check' : 'bookmark') + (saved ? 'Сохранено' : 'На потом') + '</button>'}</div><button class="text-button" data-action="share-mission" data-id="${mission.id}">Предложить другу ${icon('people')}</button><p class="detail-footnote">Можно менять шаги под себя и идти в своём темпе.</p></div>`;
   openDialog($('#detail-dialog'));
 }
 function showTradition(id) {
@@ -173,9 +161,8 @@ function showFeedback(entryId = null) {
   openDialog($('#feedback-dialog'));
 }
 function showAbout(settings = false) {
-  const transfer = DEPLOYMENT_MODE === 'pages' ? `<div class="settings-card"><h3>Дневник с прежнего адреса</h3><p>На <a href="${e(CHAT_SERVICE_URL)}#diary">прежнем сайте</a> открой эти настройки и скачай копию. Здесь нажми «Восстановить» и выбери этот файл.</p></div>` : '';
-  const copy = settings ? `<h2 id="dialog-title">Дневник и копия.</h2><p class="detail-subtitle">Записи сохраняются в этом браузере. На другом устройстве будет свой дневник.</p><div class="settings-card"><h3>Резервная копия</h3><p>В JSON-файл попадут завершённые миссии, избранное и твой круг традиций. После импорта записи объединятся с текущими.</p><div class="detail-buttons"><button class="button button-dark" data-action="export">${icon('download')} Скачать копию</button><button class="button button-outline" data-action="import">${icon('upload')} Восстановить</button></div></div><div class="settings-card"><h3>Открывать с главного экрана</h3><p>В меню браузера выбери «Добавить на главный экран» или «Установить приложение», если такой пункт доступен.</p>${installPrompt ? '<button class="button button-outline" data-action="install">Добавить приложение ' + icon('arrow') + '</button>' : ''}</div><p class="detail-footnote">Копия содержит твои заметки. Храни её там, где удобно тебе.</p>` : `<h2 id="dialog-title">Начни с любопытства.</h2><p class="detail-subtitle">Здесь можно примерить новую роль на десять минут или целый вечер.</p><ol class="mission-steps"><li><span class="step-index">01</span><p>Выбери миссию по настроению, месту и свободному времени.</p></li><li><span class="step-index">02</span><p>Примерь роль. Делай шаги в своём темпе и отмечай сделанное.</p></li><li><span class="step-index">03</span><p>Сохрани оценку и впечатление. Компас покажет, к чему хочется вернуться.</p></li></ol><div class="mission-result">${icon('people')}<p>А любимый опыт можно превратить в традицию и пригласить близких.</p></div><button class="button button-orange" data-action="go-missions">Найти первую роль ${icon('arrow')}</button>`;
-  $('#dialog-content').innerHTML = '<button class="modal-close icon-button" data-action="close-detail" aria-label="Закрыть">' + icon('close') + '</button><div class="detail-body about-body">' + copy + (settings ? transfer : '') + '</div>';
+  const copy = settings ? `<h2 id="dialog-title">Дневник и копия.</h2><p class="detail-subtitle">Записи сохраняются в этом браузере. На другом устройстве будет свой дневник.</p><div class="settings-card"><h3>Резервная копия</h3><p>В JSON-файл попадут завершённые миссии, избранное и твой круг традиций. После импорта записи объединятся с текущими.</p><div class="detail-buttons"><button class="button button-dark" data-action="export">${icon('download')} Скачать копию</button><button class="button button-outline" data-action="import">${icon('upload')} Восстановить</button></div></div><div class="settings-card"><h3>Открывать с главного экрана</h3><p>В меню браузера выбери «Добавить на главный экран» или «Установить приложение», если такой пункт доступен.</p>${installPrompt ? '<button class="button button-outline" data-action="install">Добавить приложение ' + icon('arrow') + '</button>' : ''}</div><p class="detail-footnote">Копия содержит твои заметки. Храни её там, где удобно тебе.</p>` : `<h2 id="dialog-title">Начни с любопытства.</h2><p class="detail-subtitle">Здесь можно примерить новую роль на десять минут или целый вечер.</p><ol class="mission-steps"><li><span class="step-index">01</span><p>Нажми «Удиви меня» или выбери миссию в каталоге.</p></li><li><span class="step-index">02</span><p>Примерь роль. Делай шаги в своём темпе и отмечай сделанное.</p></li><li><span class="step-index">03</span><p>Сохрани оценку и впечатление. Компас покажет, к чему хочется вернуться.</p></li></ol><div class="mission-result">${icon('people')}<p>А любимый опыт можно превратить в традицию и пригласить близких.</p></div><button class="button button-orange" data-action="go-missions">Найти первую роль ${icon('arrow')}</button>`;
+  $('#dialog-content').innerHTML = '<button class="modal-close icon-button" data-action="close-detail" aria-label="Закрыть">' + icon('close') + '</button><div class="detail-body about-body">' + copy + '</div>';
   openDialog($('#detail-dialog'));
 }
 function exportDiary() {
@@ -194,8 +181,8 @@ async function copyInvite(id) {
 document.addEventListener('click', async event => {
   const target = event.target.closest('[data-action]'); if (!target) return;
   const { action, id } = target.dataset;
-  if (action === 'chat-share') { friends.prepareMission(id);closeDialog($('#detail-dialog'));navigate('friends');return; }
-  if (action.startsWith('chat-')) { await friends.handleAction(action,id);return; }
+  if (action === 'share-mission') { friends.prepareMission(id);closeDialog($('#detail-dialog'));navigate('friends');return; }
+  if (action.startsWith('friend-')) { friends.handleAction(action,id);return; }
   if (action === 'navigate') navigate(target.dataset.view);
   if (action === 'mission') showMission(id);
   if (action === 'tradition') showTradition(id);
@@ -205,7 +192,7 @@ document.addEventListener('click', async event => {
   if (action === 'close-feedback') closeDialog($('#feedback-dialog'));
   if (action === 'go-missions') { closeDialog($('#detail-dialog')); navigate('missions'); }
   if (action === 'surprise') {
-    const mission = surpriseMission(state, view === 'missions' ? currentFilters() : homeFilters);
+    const mission = surpriseMission(state, view === 'missions' ? currentFilters() : {});
     if (mission) showMission(mission.id); else toast('Нет подходящей миссии. Попробуй изменить фильтры.');
   }
   if (action === 'favorite' || action === 'favorite-detail') { if (update(s => toggleId(s, 'favorites', id)) && action === 'favorite-detail') showMission(id); }
@@ -229,8 +216,6 @@ document.addEventListener('click', async event => {
   if (action === 'install' && installPrompt) { await installPrompt.prompt(); installPrompt = null; showAbout(true); }
 });
 document.addEventListener('change', event => {
-  if (event.target.id === 'home-time') homeFilters.time = event.target.value;
-  if (event.target.id === 'home-place') homeFilters.place = event.target.value;
   if (event.target.id === 'time-filter') { filters.time = event.target.value; $('#catalog-results').innerHTML = catalogResults(); }
   if (event.target.id === 'place-filter') { filters.place = event.target.value; $('#catalog-results').innerHTML = catalogResults(); }
   if (event.target.matches('[data-step]')) {
@@ -239,12 +224,11 @@ document.addEventListener('change', event => {
   }
 });
 document.addEventListener('input', event => {
-  friends.input(event.target);
   if (event.target.id === 'mission-search') { filters.search = event.target.value; $('#catalog-results').innerHTML = catalogResults(); }
   if (event.target.id === 'feedback-note') $('#note-length').textContent = event.target.value.length + ' / 1200';
 });
 document.addEventListener('submit', async event => {
-  if(event.target.id==='chat-message-form' || event.target.id==='chat-profile-form'){event.preventDefault();await friends.submit(event.target);return;}
+  if(event.target.id==='friend-form'){event.preventDefault();friends.submit(event.target);return;}
   if (event.target.id !== 'feedback-form') return;
   event.preventDefault();
   const form = new FormData(event.target), feedback = { rating: Number(form.get('rating')), repeat: form.get('repeat') === 'on', note: String(form.get('note') || '') };
@@ -276,4 +260,4 @@ window.addEventListener('storage', event => {
   } catch { toast('Не удалось прочитать изменения из другой вкладки. Твои текущие записи доступны здесь.'); }
 });
 render();
-if(incoming.mission && !incoming.offer && !friends.hasInvite())showMission(incoming.mission);
+if(incoming.mission)showMission(incoming.mission);

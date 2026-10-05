@@ -1,31 +1,23 @@
 # Operations
 
-There are two deployment targets. GitHub is the canonical source project; GitHub Pages serves the public static frontend. The existing owner-private Sites project serves authenticated chats and D1 messages. Preserve its project id and audience in [.openai/hosting.json](../.openai/hosting.json), Worker profile and `DB` binding. No R2 binding is needed. Public deployment addresses are in [runtime config](../public/runtime-config.mjs).
+Canonical source/history: https://github.com/Tamagochigit/bureau-other-lives. Production website: https://tamagochigit.github.io/bureau-other-lives/. Both are the owner-authorised public project. Pages Source is GitHub Actions. This product requires no separate service, identity configuration or message database.
 
-## GitHub Pages
+## Develop and publish
 
-Settings → Pages → Source must be **GitHub Actions**. This setting was saved in the owner's repository UI on 2026-10-04. [.github/workflows/pages.yml](../.github/workflows/pages.yml) verifies the application on Node 24, builds the explicit static asset list, uploads out/pages and deploys after success. Pushes to main publish; pull requests verify only; workflow_dispatch permits manual publication. Build jobs have contents:read; deployment jobs have only pages:write and id-token:write. No PAT or Site credential is needed. A bootstrap commit bearing `[skip pages]` deliberately skips publication until the application is imported.
+Clone normally. Use Node 22.13+ (CI Node 24), `npm run dev` and http://127.0.0.1:3000. No dependency install is required. The local server binds loopback, serves the selected static directory and accepts only GET/HEAD. It has no application API.
 
-Pages cannot execute the social Worker or D1. Keep all chat API requests on the protected Site origin. The Pages controller offers an ordinary link, forwarding only a known catalog offer and validated invitation token. Sign-in preserves the selected offer; it never submits a message automatically. Opening a shared mission returns to the main frontend and leaves the diary unchanged until the user acts.
+After a coherent change run `npm run verify`, then `npm run build`. Preview the deployable output with `npm start`. Commit/push normally to main. `.github/workflows/pages.yml` checks source and tests, builds out/pages, uploads only that directory and deploys Pages. Pull requests verify/build without deployment. Inspect the run for the exact commit, then fetch live HTML/assets, check status/MIME and compare hashes to the verified build. A green local suite alone does not prove publication.
 
-Recovery: fix a failing workflow step, then publish the corrected main revision or manually rerun the Pages workflow. Do not broaden Pages permissions or add a secret to browser config as a repair. The static build excludes repository docs, server source, SQL and hosting metadata from the public website artifact; those source files remain in the public GitHub project as explicitly requested.
+Codex may write commits through the connected GitHub Git-data API and advance main with force:false when shell push credentials are unavailable. Check current main first and preserve its parent; on concurrent updates fetch/reconcile rather than overwrite history. No persistent personal token is committed.
 
-## Protected chat server
+Changing the address requires runtime-config.mjs, link tests and the related decision. Relative assets/manifest must still work under a repository subpath. GitHub Pages executes no application server; adding one requires a new architecture/hosting decision.
 
-Use the installed Sites skill for installation, build, source synchronisation and publishing. Finish one coherent code/knowledge batch, run verification/lint/build and regenerate context. Obtain a source credential for this same project, pass it only through the source helper's hidden stdin, and use that helper to commit/push/package the exact output. Save/deploy the matching archive with the private Sites operation. Poll non-terminal deployments until complete. Do not create a new project as a repair.
+## Recover data and releases
 
-Schema changes: edit db/schema.ts, run `npm run db:generate`, inspect schema-only SQL, and commit new drizzle migrations plus journal/snapshot. Sites applies packaged migrations before the Worker. Never rewrite an applied migration or create tables during a request. No diary migration is involved in this change.
+Keep the diary storage key/schema v1. Export JSON through settings before changing device/origin or clearing storage. Import validates and merges completed records; no automatic cross-origin diary transfer exists. Contacts are local and are not in diary exports. Removing a shortcut does not delete Telegram conversation history; unreadable contact storage is not overwritten silently.
 
-Friends onboarding: first obtain the intended friend's sign-in address and explicitly add that named viewer using Sites access controls. Then pass a one-use chat invitation link to that friend; after sign-in they accept it in the friends view. Invitations expire after seven days and do not change the Site audience. Do not open the Site to the public or send access emails to guessed recipients. No friend address was provided in the current request.
+Rollback a code regression with an ordinary revert and the same Pages workflow. Select a standalone release; historical pre-0.3 releases depended on the retired platform. Never force-push the preserved source history or store notes/contacts/messages in Git.
 
-Recovery: retain version/deployment identifiers. Retry a saved version rather than duplicating it. Inspect Worker/migration logs after a failed deployment. Worker rollback does not undo D1 schema or message data; use compatible forward changes and preserve existing migrations/bindings. Diary recovery remains independent: import a valid local backup. New devices have a separate diary.
+The old hosted chat/database were left intact as historical data; their operations are no longer part of this product. No message export/import, legacy data deletion or recipient message was performed. Original source history remains retrievable from Git. Dated receipts in changes are historical, not current runtime requirements.
 
-Source handoff: after the source helper creates the final commit, export `git bundle create bureau-other-lives.bundle --all` and verify it. The authorised target is Tamagochigit/bureau-other-lives. The initial import commit carries this bundle and both workflow files. The one-time import workflow validates the expected source SHA, fetches the complete graph, creates a merge commit using the exact source tree with both bootstrap and source parents, and pushes normally to main. Concurrent changes fail the fast-forward push. Original SHA/author/date values remain unchanged. The bundle disappears from the current source tree after import; the one-time workflow remains as provenance and stops without it. This is not a database export.
-
-GITHUB_TOKEN pushes do not automatically start another push workflow; start the Pages workflow manually after import. Subsequent user/plugin pushes to main publish normally. For future server edits, open the existing Sites checkout with its source helper, bring the intended GitHub code changes into that checkout without copying Git metadata/credentials, and publish the private Worker. Do not force-push either source history or alter an applied migration. Pages publication does not deploy the chat server.
-
-Diary migration across domains is explicit: export from the old origin's settings and import on the new origin. Both keep the version-1 key/schema, but browsers isolate storage by origin. The new settings include the old-address link and the two-step instruction. No application/server code reads the owner's real stored notes during this migration.
-
-Managed preview depends on the unavailable control-browser skill. Do not start an improvised preview server/browser. Build, SQLite/API tests and native deployment status are evidence; phone layout and two real signed-in participants remain manual acceptance.
-
-Review when hosting, access, migration or source workflows change. See [architecture](architecture.md) and [testing](testing.md).
+[Testing](testing.md) owns proof limits; [changes](changes.md) records observed commit/run/asset receipts. Review when hosting, source publication, data recovery or external integration changes.

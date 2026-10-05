@@ -1,13 +1,13 @@
 # Onboarding
 
-Read [product](product.md), [decisions](decisions.md), [architecture](architecture.md), [rules](../rules/README.md) and [operations](operations.md), then [generated facts](../context/application.md). Use the supported Sites install helper; the Node test runtime here is Node 24.
+Read [product](product.md), [decisions](decisions.md), [architecture](architecture.md), [rules](../rules/README.md), [operations](operations.md) and [generated facts](../context/application.md). Node 22.13+ is enough; no package installation or service credentials.
 
-Five anticipated change types; history is too small to establish actual frequency:
+Five anticipated change types, not a measured frequency ranking:
 
-1. Add an activity: edit [data.mjs](../public/data.mjs), preserve ids/titles, supply actionable steps/materials/result/prompt. Verify and regenerate context. Server-shared cards resolve the catalog id/title.
-2. Change diary persistence or compass: edit [core.mjs](../public/core.mjs) and state boundaries in [app.mjs](../public/app.mjs), preserve version-1 compatibility or define a migration, and update the decision/meaning with meaningful invalid-input/known-rating checks. Chat is not permission to upload notes.
-3. Change chat behaviour: read rule 02, then [server](../server/AGENTS.md) and [browser controller](../public/friends.mjs). Test membership, blocking, invite races and retry behaviour. Schema changes follow [db router](../db/AGENTS.md) and new immutable migrations.
-4. Adjust layout: read [UX](ux.md), then [style.css](../public/style.css). Keep five primary mobile actions and large opaque text. Verify phone widths/dialogs through supported preview when available; event tests are not screenshots.
-5. Publish or recover: follow [operations](operations.md). Frontend changes in GitHub main run the Pages workflow; static build is `node scripts/build-pages.mjs`. Server changes require the existing Sites source/build/private deployment workflow separately. Preserve D1 on rollback; obtain named friend addresses before chat audience changes. Changing a deployment address also touches runtime config, links and Pages boundary tests.
+1. Add an activity in [data.mjs](../public/data.mjs); preserve ids/titles and give actionable steps/materials/result/prompt. Verify linked traditions/shares and regenerate facts.
+2. Change diary/compass in [core.mjs](../public/core.mjs) and [app.mjs](../public/app.mjs); keep v1 compatibility, invalid-input preservation and honest ratings. No upload path is authorised.
+3. Change friends in [friends.mjs](../public/friends.mjs), [contacts.mjs](../public/contacts.mjs) and [links.mjs](../public/links.mjs). Read rule 02, test validation/storage failures/public-only drafts. Conversations stay with the existing messenger; changing that boundary needs a new decision/provider.
+4. Adjust layout in [style.css](../public/style.css) after [UX](ux.md). Preserve one surprise start, readable text and five mobile actions. Event tests cannot substitute for actual phone/browser checks.
+5. Publish/recover through [operations](operations.md): verify/build, normal main update, exact Pages run and live checks. No separate backend deploy. Changing an origin requires runtime config, deep-link tests and explicit diary backup transfer.
 
-Run `npm run verify`, `npm run lint` and the Sites build helper once after the coherent batch; inspect exit codes. Review when common procedures or boundaries change.
+Regenerate facts/brief/wiki with documented tools after the coherent code/knowledge batch. Review when common changes or boundaries change.

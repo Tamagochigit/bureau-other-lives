@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { MISSIONS } from '../public/data.mjs';
 import { STORAGE_KEY, decodeState, backup, emptyState, beginMission, completeMission } from '../public/core.mjs';
 
 // Lightweight event harness: tests application wiring, not layout or browser compatibility.
@@ -28,15 +29,25 @@ test('the real UI handlers connect selection, progress, reflection, diary and co
   await import('../public/app.mjs?ui-test');
   assert.match(elements.get('#main').innerHTML,/Что попробуем сегодня/);
   const click = (action,id,extra={}) => events.click({target:{closest:()=>({dataset:{action,id,...extra}})}});
-  events.change({target:{id:'home-time',value:'10',matches:()=>false}});
-  events.change({target:{id:'home-place',value:'home',matches:()=>false}});
-  await click('surprise');
-  assert.match(elements.get('#dialog-content').innerHTML,/10 минут/);
-  assert.match(elements.get('#dialog-content').innerHTML,/Дома/);
+  assert.match(elements.get('#main').innerHTML,/Удиви меня/);
+  assert.doesNotMatch(elements.get('#main').innerHTML,/home-time|home-place|<select/);
+  // The home surprise ignores both the removed defaults and catalog filters.
+  events.change({target:{id:'time-filter',value:'10',matches:()=>false}});
+  events.change({target:{id:'place-filter',value:'home',matches:()=>false}});
+  const index=MISSIONS.findIndex(m=>m.minutes>15 && !m.places.includes('home'));
+  assert.ok(index>=0);
+  const random=Math.random;
+  Math.random=()=> (index+.1)/MISSIONS.length;
+  try { await click('surprise'); } finally { Math.random=random; }
+  assert.ok(elements.get('#dialog-content').innerHTML.includes('data-id="'+MISSIONS[index].id+'"'));
+  assert.equal(saved.has(STORAGE_KEY),false);
   await click('close-detail');
+  await click('reset-filters');
   await click('mission','detail-hunter');
   assert.ok(elements.get('#detail-dialog').open);
   await click('begin','detail-hunter');
+  assert.match(elements.get('#main').innerHTML,/Удиви меня/);
+  assert.match(elements.get('#main').innerHTML,/Продолжить/);
   events.change({target:{id:'',dataset:{step:'0'},matches:selector=>selector==='[data-step]'}});
   assert.deepEqual(decodeState(saved.get(STORAGE_KEY)).active.completedSteps,[0]);
   await click('feedback');

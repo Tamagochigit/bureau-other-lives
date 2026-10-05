@@ -7,12 +7,12 @@ One canonical home per fact; the generated wiki links to these homes.
 - [Product](product.md) — user outcome, acceptance and boundaries.
 - [Requirements](requirements.md) — explicit and inferred scope with sources.
 - [UX](ux.md) — visual and interaction intent.
-- [Architecture](architecture.md) — local diary and server chat boundaries.
+- [Architecture](architecture.md) — local diary and existing messenger boundaries.
 - [Decisions](decisions.md) — chosen format and alternatives.
 - [Business](business.md) — what this prototype does and does not monetise.
 - [Market](market.md) — why no demand claim is made.
 - [Operations](operations.md) — source, publication and recovery.
-- [Dependencies](dependencies.md) — why the supported server starter was added.
+- [Dependencies](dependencies.md) — why the standalone build needs no packages.
 - [Stack](stack.md) — entry point to extracted facts.
 - [Testing](testing.md) — verification scope and manual acceptance.
 - [Project](project.md) — delivery scope and follow-up conditions.

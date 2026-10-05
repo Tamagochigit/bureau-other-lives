@@ -1,28 +1,28 @@
-# 02 — Chat access
+# 02 — Existing messenger boundary
 
 ## Purpose
 
-Keep personal conversations visible only to their participants and make retries safe.
+Use a real existing messenger without inventing accounts, conversations, delivery or a private-data transfer.
 
 ## Applies to
 
-server/social.mjs and the social route; Sites controls the outer signed-in Site audience.
+public/friends.mjs, public/contacts.mjs and public/links.mjs.
 
 ## Mandatory rules
 
-- Derive identity from the Sites request context, never a posted sender/user id.
-- Require same-origin JSON writes, bound SQL values and membership checks.
-- Guard message reads/inserts against a concurrent block in SQL.
-- Store only invite hashes; expire invitations and allow one recipient.
-- Deduplicate sends by thread, sender and client id; reject altered retry contents.
-- Keep the Site private until specific friends are authorised; chat links never grant Site access.
+- Read/write only the separate contact key; never diary state or notes.
+- Validate/bound names and usernames; escape user text. Reject arbitrary destinations and reserved Telegram paths.
+- Build fixed HTTPS Telegram links. Drafts contain only known public catalog titles/links, never local notes.
+- A click opens Telegram; the user chooses/sends there. No automatic navigation, message-send API, bot token, embedded SDK or contact lookup.
+- Explain that contacts are browser-local shortcuts and conversations open in Telegram. Do not fabricate message history/unread counts or verified identities.
+- Do not overwrite unreadable contact data; report failed persistence without a saved claim.
 
 ## Enforcement
 
-Mechanisms: `server/social.mjs`, `db/schema.ts`, `tests/social.test.mjs`, `scripts/verify.mjs`.
+Mechanisms: `public/contacts.mjs`, `public/links.mjs`, `scripts/verify.mjs`, `tests/contacts.test.mjs`, `tests/pages.test.mjs`.
 
-The tests run actual migration/query SQL on SQLite and exercise outsider reads/writes, identity spoofing in bodies, invitation races/expiry, block transitions, retries, bounded inputs and rate limits. Hosted Sites identity injection and two-account UI acceptance still need the platform/manual check; unit tests do not prove that outer boundary.
+Tests assert validation, separate storage keys, no arbitrary links, encoded catalog drafts, failed-storage truth and no state write/network call during sharing. Real identity, client availability and delivery are Telegram/user acceptance, not claims from unit tests.
 
-No exception for sharing a mission: only the catalog id/title and explicit message are sent. See [operations](../docs/operations.md) for named viewer onboarding and [architecture](../docs/architecture.md).
+## Superseded policy — 2026-10-04
 
-Review when identity, membership, blocking, invite or send contracts change.
+The former custom-chat rule required platform-derived identity, same-origin JSON writes, bound SQL and participant/block checks, hashed expiring invitations and idempotent retries. It addressed a server that owned messages. The owner explicitly rejected building/hosting that messenger on 2026-10-05; its implementation is removed from current main, preserved in Git history. Existing legacy hosted data was not deleted. This change does not authorise transferring that data to Telegram. [Decision](../docs/decisions.md), [operations](../docs/operations.md). Review when messenger, identity or sharing changes.

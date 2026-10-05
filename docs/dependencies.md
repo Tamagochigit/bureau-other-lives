@@ -1,11 +1,9 @@
 # Dependencies
 
-Server messaging justified moving from a purely static Site to the supported Vinext starter. Its pinned lockfile, `sites()` Vite plugin, Worker entry and D1 migration packaging are kept together; hand-building a different runtime would bypass the supported publishing contract.
+Current package.json has zero runtime/development dependencies. Node built-ins provide syntax checks, tests, build and the local static preview server. The browser uses native modules, dialogs, storage and ordinary HTTPS links; no downloaded messenger SDK, bot or remote font is needed.
 
-The existing browser interface still uses authored ES modules, native dialogs and same-origin assets, with no remote fonts or model API. Server requests use Web Request/Response APIs and bound D1 statements; Drizzle defines and generates schema-only migrations. React/Vinext and Cloudflare build tooling come from the starter. Actual package versions belong to package.json/package-lock.json, not a copied version list here.
+On 2026-10-05 the unused framework/auth/database starter and its package payload were removed because the owner requested a standalone GitHub product using an existing messenger. The lockfile now contains only the root package. This reverses the historical starter choice; its reasons/receipts remain in decisions and changes.
 
-Tests use Node built-ins, including SQLite on the current Node 24 runtime. PNG icons were generated once with Pillow; it is not a runtime dependency. Chat changes do not regenerate those assets.
+Telegram links use primary documentation: [public username/draft links](https://core.telegram.org/api/links#public-username-links) and [share button](https://core.telegram.org/widgets/share). A username link can target a user, group or channel; Telegram resolves it. The application does not verify identities. No Telegram API credentials, login widget or message-send API is involved.
 
-GitHub Pages adds no runtime package. Its static build and CI verification use Node built-ins only; npm installation is still required for Worker build/lint/typecheck. GitHub's maintained checkout/setup-node and Pages actions handle source/artifact/deployment. The existing starter dependency set and lockfile remain unchanged by this migration.
-
-Review when dependencies, lockfile, framework integration or migration tooling change. See [decision](decisions.md) and [stack](stack.md).
+GitHub's checkout/setup-node and Pages artifact/configure/deploy actions provide CI hosting; workflow permissions remain source-read plus deployment-only pages-write/id-token-write. Workflow publication is distinct from npm dependencies. No new recurring service procedure needs a skill beyond the canonical operations guide. Review when a package, host, SDK or messenger contract changes. [Stack](stack.md), [decision](decisions.md).

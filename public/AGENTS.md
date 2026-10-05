@@ -1,11 +1,9 @@
 # Browser module
 
-Follow the [root router](../AGENTS.md) and [local-data rule](../rules/01-local-data.md).
+Follow the [root router](../AGENTS.md), [local-data rule](../rules/01-local-data.md), [messenger boundary](../rules/02-chat-access.md) and [static hosting rule](../rules/03-pages-boundary.md).
 
-Catalog: [data.mjs](data.mjs). State transitions and backup validation: [core.mjs](core.mjs). Rendering and browser events: [app.mjs](app.mjs). Protected chat UI: [friends.mjs](friends.mjs). Pages chat navigation: [hosted-friends.mjs](hosted-friends.mjs). Deployment/deep links: [runtime-config.mjs](runtime-config.mjs), [links.mjs](links.mjs). Layout: [style.css](style.css).
+Catalog: [data.mjs](data.mjs). Diary/backup/compass: [core.mjs](core.mjs). Rendering/events: [app.mjs](app.mjs). Telegram contact UI: [friends.mjs](friends.mjs). Separate contact schema: [contacts.mjs](contacts.mjs). Validated mission/Telegram links: [links.mjs](links.mjs). Canonical site address: [runtime-config.mjs](runtime-config.mjs). Layout: [style.css](style.css). Build whitelist: [build-pages](../scripts/build-pages.mjs).
 
-Personal notes must be escaped before insertion into markup. Keep record titles with entries so removing a catalog item does not erase diary history. Diary modules have no network API. Worker chat uses only the same-origin social API; Pages opens its protected origin through a link. Neither reads diary storage. See [chat access](../rules/02-chat-access.md) and [Pages boundary](../rules/03-pages-boundary.md). The explicit Pages asset whitelist is in [build-pages](../scripts/build-pages.mjs).
+Personal text must be escaped. Keep diary v1 compatibility and record titles after catalog retirement. All application state stays local; only known public catalog missions enter explicit Telegram drafts. No network data API, login, contact lookup, unread count or fake message history. The contact store cannot read diary state. Telegram resolves the supplied username; a shortcut is not verification of the person's identity.
 
-For visual changes, read [UX](../docs/ux.md): the owner prioritises readable text and a short start. Avoid reintroducing the removed decorative panels or mobile font reductions as part of unrelated features.
-
-Run `node scripts/verify.mjs` from the repository root. UI event tests prove wiring, not browser layout.
+Read [UX](../docs/ux.md) before changing visuals: one surprise start, large opaque text and five primary mobile actions. Run `node scripts/verify.mjs` from the root; event tests do not prove browser layout.

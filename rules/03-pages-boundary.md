@@ -1,13 +1,19 @@
-# 03 — Pages and protected chat
+# 03 — Standalone Pages boundary
 
-Applies to browser runtime config, deployment links and Pages build.
+## Mandatory rules
 
-- Keep the static frontend public and the existing chat server private; a Pages visit/invitation must not grant server access.
-- Pages opens protected chat by explicit navigation, never a cross-origin authenticated API, embedded credential or automatic message.
-- Forward only known catalog ids and validated one-use invite tokens to fixed configured destinations. Never accept a destination URL from visitor input.
-- Opening mission instructions must not begin/replace an experience or upload a diary note. Domain changes use explicit backup export/import.
-- Publish only the explicit static asset whitelist; include all required relative imports and manifest icons under the repository path.
+- Production is static and independent of the former auth/hosting service. No private API, credential, login redirect or companion server in served assets.
+- Publish only the explicit static whitelist, with complete relative imports/icons/manifest beneath the repository path.
+- Opening a known mission only displays instructions: no automatic begin/replace, persistence or outgoing request.
+- Query input cannot choose a destination; old invite/offer fields are ignored.
+- Keep diary v1 compatible. Origin/device changes use explicit backup export/import.
 
 ## Enforcement
 
-Mechanisms: `public/links.mjs`, `public/hosted-friends.mjs`, `scripts/build-pages.mjs` and `tests/pages.test.mjs`, executed by `scripts/verify.mjs` and `.github/workflows/pages.yml`. Backend authorisation remains rule 02. Review when hosts, link contracts, diary transfer or build output change.
+Mechanisms: `public/links.mjs`, `scripts/build-pages.mjs`, `scripts/verify.mjs`, `tests/pages.test.mjs`, `.github/workflows/pages.yml`.
+
+The verifier/build tests inspect served output for retired auth/server paths and complete relative references. The assembled app test rejects state writes/network calls on deep links/sharing. Source/tests/build precede Pages deployment. Rule 02 owns Telegram links.
+
+## Superseded policy — 2026-10-04
+
+The former Pages rule linked the public frontend to a private authenticated chat origin and forwarded catalog ids/invite tokens. That split no longer satisfies the owner's standalone-product instruction. The current product removes the destination and both deployment modes; Git history retains the earlier reason and implementation. Review when hosts, query links, data migration or output change.

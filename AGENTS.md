@@ -1,18 +1,11 @@
 # Application router
 
-Use Akinator for repository changes when available. Keep code and its knowledge delta together; preserve the browser diary / server chat boundary.
+Use Akinator for repository changes when available. Keep code and its knowledge delta together. This is a standalone GitHub Pages product: local diary, surprise missions and shortcuts to existing Telegram conversations.
 
-- [Product and acceptance](docs/product.md).
-- [Project overview and Git handoff](README.md).
-- [Pages / protected chat deployment split](docs/operations.md) and [frontend boundary](rules/03-pages-boundary.md).
-- [Readability and scope](docs/ux.md) — start here before changing the interface.
-- [Knowledge index](docs/README.md), including requirements, decisions, operations and testing.
-- [Diary and chat access rules](rules/README.md).
-- [Server routes](app/AGENTS.md), [social API](server/AGENTS.md) and [database](db/AGENTS.md).
-- [Generated application context](context/index.md).
-- [Session brief](.ai/BRIEF.md) and [answered questions / failures](.ai/ledger/index.md).
-- [Browser module router](public/AGENTS.md).
+- [Overview and development](README.md).
+- [Product](docs/product.md), [requirements](docs/requirements.md) and [UX](docs/ux.md).
+- [Architecture](docs/architecture.md), [operations](docs/operations.md) and [verification](docs/testing.md).
+- [Browser module router](public/AGENTS.md) and [rules](rules/README.md).
+- [Knowledge index](docs/README.md), [generated facts](context/index.md), [session brief](.ai/BRIEF.md) and [ledger](.ai/ledger/index.md).
 
-Run `node scripts/verify.mjs` once after a coherent code batch. Regenerate context with `node scripts/extract-context.mjs` after catalog, routes or storage changes.
-
-No repository-local skill was needed: Sites already covers the source and publishing workflow. Memory facts have their canonical homes in decisions and change provenance.
+Run `node scripts/verify.mjs` once after a coherent batch, then `node scripts/build-pages.mjs`. Regenerate facts with `node scripts/extract-context.mjs`, the brief with `node scripts/build-brief.mjs` and the wiki with the available Akinator indexer. No npm package installation, framework, auth provider or production application server is required. Repeated development/publication procedures live in operations; no repository-local skill duplicates them.
