@@ -11,3 +11,5 @@ Five anticipated change types, not a measured frequency ranking:
 5. Publish/recover through [operations](operations.md): verify/build, normal main update, exact Pages run and live checks. No separate backend deploy. Changing an origin requires runtime config, deep-link tests and explicit diary backup transfer.
 
 Regenerate facts/brief/wiki with documented tools after the coherent code/knowledge batch. Review when common changes or boundaries change.
+
+For Android changes start at [android/AGENTS.md](../android/AGENTS.md) and [android.md](android.md). Shared UI/icons are in public; the host is MainActivity; native data/file capability uses android.mjs plus existing core validation. Rebuild assets before Gradle and sign only with the external product key. For commercial work read [monetization.md](monetization.md); it is a proposal with no active paid rights.

@@ -7,3 +7,5 @@ Catalog: [data.mjs](data.mjs). Diary/backup/compass: [core.mjs](core.mjs). Rende
 Personal text must be escaped. Keep diary v1 compatibility and record titles after catalog retirement. All application state stays local; only known public catalog missions enter explicit Telegram drafts. No network data API, login, contact lookup, unread count or fake message history. The contact store cannot read diary state. Telegram resolves the supplied username; a shortcut is not verification of the person's identity.
 
 Read [UX](../docs/ux.md) before changing visuals: one surprise start, large opaque text and five primary mobile actions. Run `node scripts/verify.mjs` from the root; event tests do not prove browser layout.
+
+[android.mjs](android.mjs) is the optional, exact-origin native file/Telegram bridge. Keep browser download/file-input fallback and core import validation. Shared source becomes packaged Android assets; rebuild them before Gradle. Preserve home simplicity and diary compatibility. [Android router](../android/AGENTS.md).

@@ -5,6 +5,10 @@ import { CONTACTS_KEY, MAX_CONTACTS } from '../public/contacts.mjs';
 import { FRONTEND_URL } from '../public/runtime-config.mjs';
 import { MODULES, ASSETS } from './build-pages.mjs';
 const app=await readFile('public/app.mjs','utf8');
+const android=await readFile('android/app/build.gradle','utf8');
+const host=await readFile('android/app/src/main/java/ru/bureau/otherlives/MainActivity.java','utf8');
+const gradle=await readFile('android/build.gradle','utf8');
+const wrapper=await readFile('android/gradle/wrapper/gradle-wrapper.properties','utf8');
 const pkg=JSON.parse(await readFile('package.json','utf8'));
 const views=[...(app.match(/const VIEWS = \{(.+)\};/)?.[1] || '').matchAll(/([a-z]+): \[/g)].map(match=>match[1]);
 const content=[
@@ -26,6 +30,12 @@ const content=[
   '- Home selectors: '+(app.includes('home-time') || app.includes('home-place') ? 'present' : 'none'),
   '- Missions: '+MISSIONS.length+'; traditions: '+TRADITIONS.length+'; categories: '+Object.keys(CATEGORIES).join(', '),
   '- Messaging: explicit HTTPS Telegram username/share links; no in-product message storage/API',
+  '- Android applicationId: '+android.match(/applicationId '([^']+)'/)[1]+'; version: '+android.match(/versionName '([^']+)'/)[1]+' ('+android.match(/versionCode (\d+)/)[1]+')',
+  '- Android SDK: min '+android.match(/minSdk (\d+)/)[1]+'; target '+android.match(/targetSdk (\d+)/)[1]+'; compile '+android.match(/compileSdk (\d+)/)[1],
+  '- Android dependencies: WebKit '+android.match(/webkit:webkit:([^']+)/)[1]+'; Activity '+android.match(/activity:activity:([^']+)/)[1]+'; AGP '+gradle.match(/version '([^']+)'/)[1]+'; Gradle '+wrapper.match(/gradle-([0-9.]+)-bin/)[1],
+  '- Android origin: '+host.match(/ORIGIN = \"([^\"]+)\"/)[1]+'; native actions: '+[...host.matchAll(/case \"([^\"]+)\"/g)].map(match=>match[1]).join(', '),
+  '- Android output: generated out/android-assets; host android/app; workflow .github/workflows/android.yml',
+  '- Android records are separate from website storage; compatible JSON backup transfer is explicit.',
   '- Contacts are separate from diary backups; notes remain local.','',
 ].join('\n');
 await mkdir('context',{recursive:true});

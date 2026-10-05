@@ -6,7 +6,7 @@ Regenerate when catalog, storage, views, package or build configuration changes.
 - Canonical source: https://github.com/Tamagochigit/bureau-other-lives
 - Static frontend: https://tamagochigit.github.io/bureau-other-lives/
 - Browser source: public; build: scripts/build-pages.mjs; output: out/pages
-- Published modules: app, core, data, contacts, friends, links, runtime-config
+- Published modules: app, core, data, contacts, friends, links, runtime-config, android
 - Published non-module assets: index.html, .nojekyll, style.css, manifest.webmanifest, icon.svg, icon-192.png, icon-512.png, icon-maskable.png
 - Publication workflow: .github/workflows/pages.yml
 - Node engine: >=22.13.0; CI: Node 24; package dependencies: 0
@@ -18,4 +18,10 @@ Regenerate when catalog, storage, views, package or build configuration changes.
 - Home selectors: none
 - Missions: 20; traditions: 6; categories: curiosity, create, connect, slow
 - Messaging: explicit HTTPS Telegram username/share links; no in-product message storage/API
+- Android applicationId: ru.bureau.otherlives; version: 0.4.0 (4)
+- Android SDK: min 26; target 36; compile 36
+- Android dependencies: WebKit 1.17.1; Activity 1.12.4; AGP 8.13.2; Gradle 8.13
+- Android origin: https://appassets.androidplatform.net; native actions: export, import, open-url
+- Android output: generated out/android-assets; host android/app; workflow .github/workflows/android.yml
+- Android records are separate from website storage; compatible JSON backup transfer is explicit.
 - Contacts are separate from diary backups; notes remain local.

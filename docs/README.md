@@ -26,3 +26,6 @@ Category indexes for tools and browsing: [operations](ops/README.md), [project](
 [Ledger](../.ai/ledger/index.md) records format/scope sources and observed verification failures; working assumptions and reversals live in [decisions](decisions.md). [Session brief](../.ai/BRIEF.md) links the canonical starting points.
 
 Review when: a knowledge home is added, renamed, moved or removed.
+
+- [Android](android.md) — packaged runtime, signing, installation and recovery.
+- [Motivation and monetisation](monetization.md) — testable business/return hypotheses.

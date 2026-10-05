@@ -1,4 +1,5 @@
 import { createFriendsController } from './friends.mjs';
+import { connectAndroid } from './android.mjs';
 import { incomingLinks } from './links.mjs';
 import { MISSIONS, TRADITIONS, CATEGORIES, PLACES } from './data.mjs';
 import { STORAGE_KEY, emptyState, decodeState, beginMission, toggleStep, completeMission, editEntry, toggleId, filterMissions, surpriseMission, compass, backup, importBackup, escapeHtml } from './core.mjs';
@@ -29,7 +30,7 @@ const iconPaths = {
   circle: '<circle cx="12" cy="12" r="9"/>',
 };
 function icon(name, className = '') {
-  return `<svg class="icon ${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${iconPaths[name] || iconPaths.spark}</svg>`;
+  return `<svg class="icon ${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${iconPaths[name] || iconPaths.spark}</svg>`;
 }
 let state = emptyState(), storageWritable = true, storageMessage = '';
 try { const saved = localStorage.getItem(STORAGE_KEY); if (saved) state = decodeState(saved); } catch (error) { storageWritable = false; storageMessage = error.message || 'Браузер не разрешает сохранение.'; }
@@ -40,6 +41,8 @@ let feedbackEntryId = null, returnFocus = null, installPrompt = null;
 let toastTimer;
 const friends = createFriendsController({toast});
 const incoming = incomingLinks(location.search || '');
+const android = connectAndroid({onImport: restoreDiary, onStatus: toast});
+const storagePlace = android ? 'в этом приложении на устройстве' : 'в этом браузере';
 function toast(message) { $('#toast').textContent = message; $('#toast').classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('#toast').classList.remove('visible'), 4200); }
 function storeState(next) {
   if (storageWritable) {
@@ -119,8 +122,8 @@ function compassPage() {
 function diaryPage() {
   return `${intro('МАЛЕНЬКИЕ ИСТОРИИ, КОТОРЫЕ ОСТАЛИСЬ', 'Дневник открытий.', 'Здесь живут твои попытки, впечатления и желание попробовать снова.', '<button class="button button-outline" data-action="export">' + icon('download') + ' Сохранить копию</button>')}
     ${activeBanner()}
-    ${!state.entries.length ? '<section class="empty-state diary-empty"><h2>Пока нет записей.</h2><p>Попробуй миссию и сохрани впечатление.</p><button class="button button-orange" data-action="navigate" data-view="missions">Найти первую роль ' + icon('arrow') + '</button></section>' : '<div class="diary-count">Сохранено опытов: ' + state.entries.length + '</div><div class="diary-list">' + state.entries.map(entry => '<article class="diary-entry"><div class="diary-date"><strong>' + new Date(entry.completedAt).getDate() + '</strong><span>' + new Date(entry.completedAt).toLocaleDateString('ru-RU', {month:'short',year:'numeric'}) + '</span></div><div class="entry-content">' + tag(entry.category) + '<h2>' + e(entry.title) + '</h2><p class="entry-note">' + e(entry.note || 'Впечатление сохранено. Можно добавить пару слов о нём.') + '</p><div class="entry-bottom"><span class="entry-rating">' + icon('spark') + ' ' + entry.rating + ' / 5</span>' + (entry.repeat ? '<span class="repeat-badge">' + icon('heart') + ' Хочется повторить</span>' : '') + '<button class="text-button" data-action="edit-entry" data-id="' + entry.id + '">Изменить запись ' + icon('pen') + '</button></div></div></article>').join('') + '</div>'}
-    <p class="privacy-note">${icon('book')} Записи хранятся в этом браузере. Резервная копия поможет перенести их на другое устройство.</p>`;
+    ${!state.entries.length ? '<section class="empty-state diary-empty"><h2>Пока нет записей.</h2><p>Попробуй миссию и сохрани впечатление.</p><button class="button button-orange" data-action="navigate" data-view="missions">Найти первую роль ' + icon('arrow') + '</button></section>' : '<div class="diary-count">Сохранено опытов: ' + state.entries.length + ' · разных ролей: ' + new Set(state.entries.map(entry => entry.missionId)).size + '</div><div class="diary-list">' + state.entries.map(entry => '<article class="diary-entry"><div class="diary-date"><strong>' + new Date(entry.completedAt).getDate() + '</strong><span>' + new Date(entry.completedAt).toLocaleDateString('ru-RU', {month:'short',year:'numeric'}) + '</span></div><div class="entry-content">' + tag(entry.category) + '<h2>' + e(entry.title) + '</h2><p class="entry-note">' + e(entry.note || 'Впечатление сохранено. Можно добавить пару слов о нём.') + '</p><div class="entry-bottom"><span class="entry-rating">' + icon('spark') + ' ' + entry.rating + ' / 5</span>' + (entry.repeat ? '<span class="repeat-badge">' + icon('heart') + ' Хочется повторить</span>' : '') + '<button class="text-button" data-action="edit-entry" data-id="' + entry.id + '">Изменить запись ' + icon('pen') + '</button></div></div></article>').join('') + '</div>'}
+    <p class="privacy-note">${icon('book')} Записи хранятся ${storagePlace}. Резервная копия поможет перенести их на другое устройство.</p>`;
 }
 function friendsPage() { return intro('', 'Друзья', 'Напиши другу или предложи миссию в Telegram.') + friends.page(); }
 function render() {
@@ -161,12 +164,13 @@ function showFeedback(entryId = null) {
   openDialog($('#feedback-dialog'));
 }
 function showAbout(settings = false) {
-  const copy = settings ? `<h2 id="dialog-title">Дневник и копия.</h2><p class="detail-subtitle">Записи сохраняются в этом браузере. На другом устройстве будет свой дневник.</p><div class="settings-card"><h3>Резервная копия</h3><p>В JSON-файл попадут завершённые миссии, избранное и твой круг традиций. После импорта записи объединятся с текущими.</p><div class="detail-buttons"><button class="button button-dark" data-action="export">${icon('download')} Скачать копию</button><button class="button button-outline" data-action="import">${icon('upload')} Восстановить</button></div></div><div class="settings-card"><h3>Открывать с главного экрана</h3><p>В меню браузера выбери «Добавить на главный экран» или «Установить приложение», если такой пункт доступен.</p>${installPrompt ? '<button class="button button-outline" data-action="install">Добавить приложение ' + icon('arrow') + '</button>' : ''}</div><p class="detail-footnote">Копия содержит твои заметки. Храни её там, где удобно тебе.</p>` : `<h2 id="dialog-title">Начни с любопытства.</h2><p class="detail-subtitle">Здесь можно примерить новую роль на десять минут или целый вечер.</p><ol class="mission-steps"><li><span class="step-index">01</span><p>Нажми «Удиви меня» или выбери миссию в каталоге.</p></li><li><span class="step-index">02</span><p>Примерь роль. Делай шаги в своём темпе и отмечай сделанное.</p></li><li><span class="step-index">03</span><p>Сохрани оценку и впечатление. Компас покажет, к чему хочется вернуться.</p></li></ol><div class="mission-result">${icon('people')}<p>А любимый опыт можно превратить в традицию и пригласить близких.</p></div><button class="button button-orange" data-action="go-missions">Найти первую роль ${icon('arrow')}</button>`;
+  const copy = settings ? `<h2 id="dialog-title">Дневник и копия.</h2><p class="detail-subtitle">Записи сохраняются ${storagePlace}. На другом устройстве будет свой дневник.</p><div class="settings-card"><h3>Резервная копия</h3><p>В JSON-файл попадут завершённые миссии, избранное и твой круг традиций. После импорта записи объединятся с текущими.</p><div class="detail-buttons"><button class="button button-dark" data-action="export">${icon('download')} Скачать копию</button><button class="button button-outline" data-action="import">${icon('upload')} Восстановить</button></div></div>${android ? '<div class="settings-card"><h3>Бюро · Android 0.4.0</h3><p>Миссии и дневник работают без интернета. Переписка открывается в Telegram. Записи из сайта можно перенести сюда через JSON-копию.</p></div>' : `<div class="settings-card"><h3>Открывать с главного экрана</h3><p>В меню браузера выбери «Добавить на главный экран» или «Установить приложение», если такой пункт доступен.</p>${installPrompt ? '<button class="button button-outline" data-action="install">Добавить приложение ' + icon('arrow') + '</button>' : ''}</div>`}<p class="detail-footnote">Копия содержит твои заметки. Храни её там, где удобно тебе.</p>` : `<h2 id="dialog-title">Начни с любопытства.</h2><p class="detail-subtitle">Здесь можно примерить новую роль на десять минут или целый вечер.</p><ol class="mission-steps"><li><span class="step-index">01</span><p>Нажми «Удиви меня» или выбери миссию в каталоге.</p></li><li><span class="step-index">02</span><p>Примерь роль. Делай шаги в своём темпе и отмечай сделанное.</p></li><li><span class="step-index">03</span><p>Сохрани оценку и впечатление. Компас покажет, к чему хочется вернуться.</p></li></ol><div class="mission-result">${icon('people')}<p>А любимый опыт можно превратить в традицию и пригласить близких.</p></div><button class="button button-orange" data-action="go-missions">Найти первую роль ${icon('arrow')}</button>`;
   $('#dialog-content').innerHTML = '<button class="modal-close icon-button" data-action="close-detail" aria-label="Закрыть">' + icon('close') + '</button><div class="detail-body about-body">' + copy + '</div>';
   openDialog($('#detail-dialog'));
 }
 function exportDiary() {
   try {
+    if (android) { android.exportDiary(backup(state)); return; }
     const url = URL.createObjectURL(new Blob([backup(state)], { type: 'application/json' }));
     const link = document.createElement('a'); link.href = url; link.download = 'bureau-diary-' + new Date().toISOString().slice(0,10) + '.json'; document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 30000);
     toast('Копия дневника подготовлена для скачивания.');
@@ -211,7 +215,7 @@ document.addEventListener('click', async event => {
   if (action === 'feedback') showFeedback();
   if (action === 'edit-entry') showFeedback(id);
   if (action === 'export') exportDiary();
-  if (action === 'import') $('#backup-file').click();
+  if (action === 'import') { if (android) android.importDiary(); else $('#backup-file').click(); }
   if (action === 'copy-invite') await copyInvite(id);
   if (action === 'install' && installPrompt) { await installPrompt.prompt(); installPrompt = null; showAbout(true); }
 });
@@ -234,17 +238,27 @@ document.addEventListener('submit', async event => {
   const form = new FormData(event.target), feedback = { rating: Number(form.get('rating')), repeat: form.get('repeat') === 'on', note: String(form.get('note') || '') };
   if (update(s => feedbackEntryId ? editEntry(s, feedbackEntryId, feedback) : completeMission(s, feedback))) { closeDialog($('#feedback-dialog')); navigate('diary'); toast(feedbackEntryId ? 'Запись обновлена.' : 'Ещё одна маленькая история в твоём дневнике.'); }
 });
-$('#backup-file').addEventListener('change', async event => {
-  const file = event.target.files?.[0]; if (!file) return;
+function restoreDiary(raw) {
   try {
-    if (file.size > 32_000_000) throw new Error('Файл слишком большой. Максимум — 32 МБ.');
-    const raw = await file.text(), next = importBackup(state, raw);
+    const next = importBackup(state, raw);
     const added = next.entries.length-state.entries.length; storeState(next);
     if ($('#detail-dialog').open) closeDialog($('#detail-dialog'));
     navigate('diary'); toast('Копия восстановлена. Новых записей: ' + added + '.');
   } catch(error) { toast(error.message || 'Не удалось прочитать файл. Текущий дневник сохранён.'); }
+}
+$('#backup-file').addEventListener('change', async event => {
+  const file = event.target.files?.[0]; if (!file) return;
+  try {
+    if (file.size > 32_000_000) throw new Error('Файл слишком большой. Максимум — 32 МБ.');
+    restoreDiary(await file.text());
+  } catch(error) { toast(error.message || 'Не удалось прочитать файл. Текущий дневник сохранён.'); }
   finally { event.target.value = ''; }
 });
+window.bureauAndroidBack = () => {
+  for (const id of ['#feedback-dialog', '#detail-dialog']) if ($(id).open) { closeDialog($(id)); return true; }
+  if (view !== 'home') { navigate('home'); return true; }
+  return false;
+};
 for (const dialog of [$('#detail-dialog'), $('#feedback-dialog')]) {
   dialog.addEventListener('click', event => { if (event.target === dialog) { const bounds = dialog.getBoundingClientRect(); if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closeDialog(dialog); } });
   dialog.addEventListener('close', () => document.body.classList.remove('modal-open'));

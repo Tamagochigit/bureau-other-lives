@@ -20,6 +20,10 @@ Source date: 2026-10-04, user: «Давай создадим приложени�
 | R14 | current / P0 | Preserve diary recovery and honest messaging boundaries | R13 constraint, revised 2026-10-05; existing Telegram conversations, no automatic send, known-mission links and compatible backup merge |
 | R15 | current / P0 | Restore an unfiltered «Удиви меня» home | Explicit owner 2026-10-05; no home time/place controls, active mission preserved when browsing |
 | R16 | current / P0 | Fully remove product dependency on ChatGPT | Explicit owner 2026-10-05; no platform login/auth/runtime/server code in current app; GitHub/Pages build and live checks |
+| R17 | current / P0 | Deliver an installable signed Android APK | Explicit owner 2026-10-05; release build/lint, signature/manifest checks, observed emulator/device scope |
+| R18 | current / P0 | Suitable cohesive style/icon with readable controls | Explicit owner 2026-10-05; open-door mark, warm paper/dark ink, common line icons; existing readability/home constraints retained |
+| R19 | current / P1 | Propose revenue and user-return motivation | Explicit owner 2026-10-05; concrete thematic-pack hypothesis, useful free core, voluntary return pilot; billing not implemented |
+| R20 | current / P0 | Keep APK diary local and recoverable | Inferred from standalone/diary requirements; packaged assets, no data API or user/data-access permissions, compatible JSON export/import through system picker |
 
 
 Append-only history: 2026-10-04 created R01–R07 in the first implementation. Inferred decisions are defaults for this prototype, not separately claimed user instructions.
@@ -33,3 +37,5 @@ Review when: the user changes scope, the meaning of data changes or a requiremen
 2026-10-04: R10 clarified to GitHub; R13–R14 added after the owner created the public repository and authorised moving the site/project. The optional server-location question returned no answer; retaining the existing protected server is the documented default. No new paid server, audience expansion for chats or automatic upload of notes is authorised.
 
 2026-10-05: R09/R11–R14 are revised; R15–R16 follow the explicit surprise/existing-messenger/standalone-product request. Custom chat, platform access/invites and separate server defaults are superseded. The optional external-versus-embedded messenger question returned no answer; Telegram links are the documented default, not a claimed preference answer. Historical source commits and old hosted data are preserved.
+
+2026-10-05: R17–R20 follow «Давай создадим APK … стиль и иконки … как зарабатывать … мотивация». Optional audience/distribution answers were empty: adult novelty/direct-install pilot are documented defaults; no store publication, account creation, payment or analytics deployment is implied.

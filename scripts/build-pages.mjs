@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { resolve, dirname, join } from 'node:path';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-export const MODULES = ['app','core','data','contacts','friends','links','runtime-config'];
+export const MODULES = ['app','core','data','contacts','friends','links','runtime-config','android'];
 export const ASSETS = ['style.css','manifest.webmanifest','icon.svg','icon-192.png','icon-512.png','icon-maskable.png'];
 export async function buildPages(output = join(root, 'out/pages')) {
   await rm(output, { recursive:true, force:true });

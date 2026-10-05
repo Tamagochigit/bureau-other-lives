@@ -35,3 +35,7 @@ npm start
 Полная Git-история прежних версий сохранена. Старый сервер чатов удалён из текущего проекта; его прежние данные и публикация не удалялись. Датированные документы о прошлой архитектуре — история решений.
 
 [Документация](docs/README.md) · [Архитектура](docs/architecture.md) · [Публикация и восстановление](docs/operations.md) · [Проверки](docs/testing.md).
+
+## Android
+
+[Download APK 0.4.0](https://github.com/Tamagochigit/bureau-other-lives/raw/refs/heads/main/downloads/bureau-0.4.0.apk). APK 0.4.0 is a signed direct-install pilot with packaged offline missions and local diary data. [Android build, signing and recovery](docs/android.md); [motivation and monetisation hypotheses](docs/monetization.md). Browser records transfer through the compatible JSON backup; contacts are separate. CI produces an unsigned APK until a private product key signs it.

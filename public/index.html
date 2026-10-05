@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f6f4ef">
+  <meta name="theme-color" content="#f7f5f0">
   <meta name="description" content="Примеряй новые роли, проживай маленькие приключения и находи то, к чему хочется вернуться. Бюро других жизней — личный дневник открытий.">
   <meta name="color-scheme" content="light">
   <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>Бюро других жизней — маленькие приключения</title>
   <link rel="icon" type="image/svg+xml" href="./icon.svg">
   <link rel="apple-touch-icon" href="./icon-192.png">
@@ -18,14 +19,14 @@
   <div class="app-shell">
     <aside class="sidebar" aria-label="Навигация">
       <a class="brand" href="#home" aria-label="Бюро других жизней — главная">
-        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <img class="brand-mark" src="./icon.svg" alt="" width="44" height="44">
         <span class="brand-name">БЮРО<br><span>ДРУГИХ ЖИЗНЕЙ</span></span>
       </a>
       <nav class="nav" id="navigation"></nav>
       <button class="sidebar-help" data-action="about"><span aria-hidden="true">?</span> Как это устроено</button>
     </aside>
     <div class="workspace">
-      <header class="topbar"><span class="topbar-label" id="page-label">Бюро других жизней</span><button class="icon-button" data-action="settings" aria-label="Дневник и резервная копия" title="Дневник и резервная копия" id="settings-icon"></button></header>
+      <header class="topbar"><span class="topbar-identity"><img class="topbar-mark" src="./icon.svg" alt="" width="36" height="36"><span class="topbar-label" id="page-label">Бюро других жизней</span></span><button class="icon-button" data-action="settings" aria-label="Дневник и резервная копия" title="Дневник и резервная копия" id="settings-icon"></button></header>
       <div id="storage-warning" class="storage-warning" role="status" hidden></div>
       <main id="main" tabindex="-1"></main>
     </div>

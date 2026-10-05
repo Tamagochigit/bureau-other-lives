@@ -21,3 +21,7 @@ Rollback a code regression with an ordinary revert and the same Pages workflow. 
 The old hosted chat/database were left intact as historical data; their operations are no longer part of this product. No message export/import, legacy data deletion or recipient message was performed. Original source history remains retrievable from Git. Dated receipts in changes are historical, not current runtime requirements.
 
 [Testing](testing.md) owns proof limits; [changes](changes.md) records observed commit/run/asset receipts. Review when hosting, source publication, data recovery or external integration changes.
+
+## Android pilot
+
+[android.md](android.md) owns local build/signing and diary transfer. .github/workflows/android.yml verifies the shared application and builds/lints an unsigned release. Private signing material is excluded from Git and backed up separately; compatible updates require the same package/key and an increased versionCode. Do not install an unsigned CI artifact or treat it as store publication. Website/Android updates use one preserved Git history; no hosted legacy data is removed. The delivered APK stays at its bundled version until installed updates.
