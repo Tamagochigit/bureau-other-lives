@@ -38,8 +38,9 @@ done
 "$adb" -s emulator-5556 install -r android/app/build/outputs/apk/debug/app-debug.apk
 "$adb" -s emulator-5556 install -r android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 "$adb" -s emulator-5556 shell -n am instrument -w -e class ru.bureau.otherlives.OfflineSmokeTest,ru.bureau.otherlives.StoreScreenshotsTest ru.bureau.otherlives.debug.test/androidx.test.runner.AndroidJUnitRunner | tee out/store-capture/instrumentation.txt
+"$adb" -s emulator-5556 logcat -d >out/store-capture/logcat.txt
+"$adb" -s emulator-5556 shell -n wm size >out/store-capture/display.txt
 "$adb" -s emulator-5556 pull /sdcard/Android/data/ru.bureau.otherlives.debug/files/store-screens out/store-capture/screenshots
 "$adb" -s emulator-5556 pull /sdcard/Android/data/ru.bureau.otherlives.debug/files/store-icon.png out/store-capture/icon-512.png
-"$adb" -s emulator-5556 logcat -d >out/store-capture/logcat.txt
 grep -q 'OK (3 tests)' out/store-capture/instrumentation.txt
 test "$(find out/store-capture/screenshots -name '*.png' | wc -l)" -eq 5

@@ -4,7 +4,6 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,6 +17,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
@@ -34,27 +36,31 @@ public final class StoreScreenshotsTest {
         activity = (MainActivity)instrumentation.startActivitySync(new Intent(instrumentation.getTargetContext(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         web = activity.findViewById(R.id.bureau_webview);
         await("typeof window.bureauAndroidBack==='function'");
-        js("localStorage.clear();location.hash='home';location.reload()");
-        await("!!document.querySelector('[data-action=surprise]')");
+        js("window.__bureauTestOldDocument=true;localStorage.clear();location.hash='home';location.reload()");
+        await("window.__bureauTestOldDocument!==true && typeof window.bureauAndroidBack==='function' && !!document.querySelector('[data-action=surprise]')");
         // Size a real emulator display so its app content is 9:16, without scaling/cropping the interface.
-        for (int attempt=0; attempt<3; attempt++) {
-            int[] size = new int[4];
+        for (int attempt=0; attempt<5; attempt++) {
+            int[] size = new int[2];
             instrumentation.runOnMainSync(() -> {
-                Point display = new Point();
-                activity.getWindowManager().getDefaultDisplay().getRealSize(display);
-                size[0]=web.getWidth();size[1]=web.getHeight();size[2]=display.x;size[3]=display.y;
+                size[0]=web.getWidth();size[1]=web.getHeight();
             });
             if(size[0]==1080 && size[1]==1920)break;
-            shell("wm size "+(size[2]+1080-size[0])+"x"+(size[3]+1920-size[1]));
+            // Android 35 getRealSize can return compatibility window bounds, not wm override size.
+            String display=shell("wm size");int width=0,height=0;
+            Matcher matcher=Pattern.compile("(\\d+)x(\\d+)").matcher(display);
+            while(matcher.find()) {width=Integer.parseInt(matcher.group(1));height=Integer.parseInt(matcher.group(2));}
+            assertTrue("Shell display size: "+display,width>0 && height>0);
+            System.out.println("Store viewport "+size[0]+"x"+size[1]+"; display "+width+"x"+height);
+            shell("wm size "+(width+1080-size[0])+"x"+(height+1920-size[1]));
             Thread.sleep(1000);
         }
         instrumentation.runOnMainSync(() -> {assertEquals(1080,web.getWidth());assertEquals(1920,web.getHeight());});
     }
-    private void shell(String command) throws Exception {
-        try (ParcelFileDescriptor fd = instrumentation.getUiAutomation().executeShellCommand(command)) {
-            try (java.io.FileInputStream stream = new java.io.FileInputStream(fd.getFileDescriptor())) {
-                byte[] buffer = new byte[1024];while(stream.read(buffer)!=-1) {}
-            }
+    private String shell(String command) throws Exception {
+        try (ParcelFileDescriptor.AutoCloseInputStream stream=new ParcelFileDescriptor.AutoCloseInputStream(instrumentation.getUiAutomation().executeShellCommand(command))) {
+            ByteArrayOutputStream output=new ByteArrayOutputStream();byte[] buffer=new byte[1024];int count;
+            while((count=stream.read(buffer))!=-1)output.write(buffer,0,count);
+            return output.toString("UTF-8");
         }
     }
     private String js(String source) throws Exception {

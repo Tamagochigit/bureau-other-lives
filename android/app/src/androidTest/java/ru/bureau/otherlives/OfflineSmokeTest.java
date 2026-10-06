@@ -20,6 +20,7 @@ public final class OfflineSmokeTest {
 
     private Instrumentation getInstrumentation() { return InstrumentationRegistry.getInstrumentation(); }
     @Before public void setUp() throws Exception {
+        assertTrue("Never reset the product package",getInstrumentation().getTargetContext().getPackageName().endsWith(".debug"));
         Intent intent = new Intent(getInstrumentation().getTargetContext(), MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity = (MainActivity)getInstrumentation().startActivitySync(intent);
         web = activity.findViewById(R.id.bureau_webview);
@@ -36,9 +37,16 @@ public final class OfflineSmokeTest {
         return response[0];
     }
     private void click(String selector) throws Exception { js("document.querySelector('" + selector + "').click()"); }
+    private void reload(boolean reset) throws Exception {
+        js("window.__bureauTestOldDocument=true;"+(reset?"localStorage.clear();":"")+"location.reload()");
+        long deadline=System.currentTimeMillis()+30000;
+        while(!"true".equals(js("window.__bureauTestOldDocument!==true && typeof window.bureauAndroidBack==='function' && !!document.querySelector('#main').firstElementChild"))) {
+            if(System.currentTimeMillis()>deadline)fail("New document did not finish loading");Thread.sleep(150);
+        }
+    }
 
     @Test public void testOfflineMissionDiaryReloadAndBack() throws Exception {
-        js("localStorage.clear();location.reload()");
+        reload(true);
         long deadline=System.currentTimeMillis()+20000;
         while (!"true".equals(js("!!document.querySelector('[data-action=surprise]')"))) {
             if(System.currentTimeMillis()>deadline)fail("Home did not reload");Thread.sleep(150);
@@ -51,8 +59,7 @@ public final class OfflineSmokeTest {
         click("[data-action=feedback]");
         js("document.querySelector('input[name=rating][value=5]').checked=true;document.querySelector('#feedback-note').value='Android offline test';document.querySelector('#feedback-form').requestSubmit()");
         assertEquals("true", js("document.querySelector('#main').innerText.includes('Android offline test')"));
-        js("location.reload()");
-        Thread.sleep(600);
+        reload(false);
         assertEquals("true", js("JSON.parse(localStorage.getItem('other-lives:state:v1')).entries[0].note==='Android offline test'"));
         click("[data-action=settings]");
         assertEquals("true", js("document.querySelector('#dialog-content').innerText.includes('Android 0.4.1')"));

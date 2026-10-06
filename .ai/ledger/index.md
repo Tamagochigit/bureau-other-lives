@@ -5,6 +5,7 @@ Regenerate when a ledger record is added or changed.
 
 - [question: first application format](question/first-application-format.md)
 - [failure: android capture avd path](failure/android-capture-avd-path.md)
+- [failure: android capture document and size](failure/android-capture-document-and-size.md)
 - [failure: android ci missing metadata](failure/android-ci-missing-metadata.md)
 - [failure: android ci removed tools](failure/android-ci-removed-tools.md)
 - [failure: android portable build setup](failure/android-portable-build-setup.md)
