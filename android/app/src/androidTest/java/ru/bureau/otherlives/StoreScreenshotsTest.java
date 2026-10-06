@@ -104,8 +104,16 @@ public final class StoreScreenshotsTest {
     private void scrollToContent(String selector) throws Exception {
         String target="document.querySelector("+JSONObject.quote(selector)+")";
         await("!!"+target);
-        js("window.scrollTo({top:window.scrollY+"+target+".getBoundingClientRect().top-16,behavior:'instant'})");
-        await("Math.abs("+target+".getBoundingClientRect().top-16)<2");
+        String position=js("Math.max(0,Math.min(window.scrollY+"+target+".getBoundingClientRect().top-16,document.scrollingElement.scrollHeight-window.innerHeight))");
+        System.out.println("Capture scroll "+selector+": "+js("JSON.stringify({desired:"+position+",y:window.scrollY,top:"+target+".getBoundingClientRect().top,height:innerHeight,max:document.scrollingElement.scrollHeight-innerHeight})"));
+        int stable=0;
+        for(int attempt=0;attempt<20 && stable<2;attempt++) {
+            js("window.scrollTo({top:"+position+",behavior:'instant'})");
+            Thread.sleep(150);
+            stable="true".equals(js("Math.abs(window.scrollY-"+position+")<2"))?stable+1:0;
+        }
+        assertEquals("Stable scroll within the real browser range: "+selector,2,stable);
+        assertEquals("Captured content is visible: "+selector,"true",js(target+".getBoundingClientRect().top<innerHeight-80 && "+target+".getBoundingClientRect().bottom>0"));
     }
     private void complete(String id,int rating,String note) throws Exception {
         navigate("missions");

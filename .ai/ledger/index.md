@@ -16,6 +16,7 @@ Regenerate when a ledger record is added or changed.
 - [failure: private smoke header](failure/private-smoke-header.md)
 - [failure: readability links contrast](failure/readability-links-contrast.md)
 - [failure: requirement status enum](failure/requirement-status-enum.md)
+- [failure: store capture scroll offset](failure/store-capture-scroll-offset.md)
 - [failure: ui filter fixture](failure/ui-filter-fixture.md)
 - [failure: wiki index write flag](failure/wiki-index-write-flag.md)
 - [decision: distil android capture document and size](decision/distil-android-capture-document-and-size.md)

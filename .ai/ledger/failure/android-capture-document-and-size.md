@@ -32,3 +32,7 @@ Retain the old-document marker and behavioural/exact-size assertions. Quote nume
 ## Confirmed Follow-up
 
 Run37498592979 passed dialog opening and mission start after fresh-document synchronisation. Feedback failed because Chromium rejected input[name=rating][value=5] as an invalid numeric CSS selector. Both test selectors now quote their numeric values. Display evidence remained physical320×640/override1080×1920 despite resize requests; window-only resizing was insufficient. Configure real AVD LCD1080×2064/density480 before boot and reset wm overrides. Exact viewport/behaviour assertions are retained. Updated native run must confirm this setup.
+
+## Verified Resolution
+
+Run37500968161/sourceb9e5a7e passed all three Android35 tests at26.24s and produced five RGB1080x1920 PNGs plusRGB512 icon. Artifact11429931649 ZIP SHA256972da7dac8218b63737f7d01a3e63857f2466e2c5181331816521de3659ba67e was independently hashed; measured image dimensions confirm physical LCD correction and quoted selectors. Final image quality follow-up is distinct from this resolved native setup failure.
