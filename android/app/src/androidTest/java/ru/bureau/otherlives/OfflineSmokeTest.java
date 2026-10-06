@@ -62,7 +62,7 @@ public final class OfflineSmokeTest {
         reload(false);
         assertEquals("true", js("JSON.parse(localStorage.getItem('other-lives:state:v1')).entries[0].note==='Android offline test'"));
         click("[data-action=settings]");
-        assertEquals("true", js("document.querySelector('#dialog-content').innerText.includes('Android " + BuildConfig.VERSION_NAME + "')"));
+        assertEquals("true", js("document.querySelector('#dialog-content').innerText.includes('Android " + BuildConfig.VERSION_NAME.replace("-debug", "") + "')"));
         assertEquals("true", js("window.bureauAndroidBack()"));
         assertEquals("false", js("document.querySelector('#detail-dialog').open"));
         js("location.hash='friends'");Thread.sleep(150);

@@ -8,6 +8,7 @@ Regenerate when a ledger record is added or changed.
 - [failure: android capture document and size](failure/android-capture-document-and-size.md)
 - [failure: android ci missing metadata](failure/android-ci-missing-metadata.md)
 - [failure: android ci removed tools](failure/android-ci-removed-tools.md)
+- [failure: android debug version assertion](failure/android-debug-version-assertion.md)
 - [failure: android portable build setup](failure/android-portable-build-setup.md)
 - [failure: chat migration knowledge drift](failure/chat-migration-knowledge-drift.md)
 - [failure: icon conversion missing cairosvg 64037130cdd6](failure/icon-conversion-missing-cairosvg-64037130cdd6.md)
