@@ -14,16 +14,17 @@ Source date: 2026-10-04, user: «Давай создадим приложени�
 | R08 | current / P0 | Make text larger and darker throughout the application | Explicit owner feedback, 2026-10-04; CSS text sizing and colour calculation, device acceptance pending |
 | R09 | current / P0 | Keep the start simple and reduce visual noise | Explicit owner scope; one surprise action, visible resume, no home time/place selector or decorative panels; later messenger request permits a focused friends view |
 | R10 | current / P1 | Provide GitHub source/history | Owner clarified «Ну гитхаб» and created Tamagochigit/bureau-other-lives; complete source/history import, normal clone |
-| R11 | current / P0 | Add a friends messenger | Owner clarified 2026-10-05: use an existing messenger; local Telegram contacts, explicit chat/draft links, real client/account acceptance pending |
-| R12 | current / P0 | Keep diary private and separate messenger data | Implementation constraint supporting R11; separate local contact key, public catalog drafts only, no notes or message API |
+| R11 | current / P0 | Use existing applications for friends | Owner 2026-10-07: universal «Поделиться», explicitly no address book; application/recipient chosen by OS/user |
+| R12 | current / P0 | Keep diary private and separate sharing | Public catalog payload only, no diary/contact access; native id-only protocol, cancellation has no transfer side effect |
 | R13 | current / P0 | Move the website and complete project to the created GitHub repository | Owner «Я создал. Можешь и сайт перенести и всё туда уже, это будет полноценый гит проект и сайт»; Standalone Pages frontend, current source/tests/docs and full preserved history in GitHub; successful publication |
-| R14 | current / P0 | Preserve diary recovery and honest messaging boundaries | R13 constraint, revised 2026-10-05; existing Telegram conversations, no automatic send, known-mission links and compatible backup merge |
+| R14 | current / P0 | Preserve recovery and honest sharing | Same diary v1/backup merge; no automatic send or delivery claim; known-mission links; retired contact storage untouched |
 | R15 | current / P0 | Restore an unfiltered «Удиви меня» home | Explicit owner 2026-10-05; no home time/place controls, active mission preserved when browsing |
 | R16 | current / P0 | Fully remove product dependency on ChatGPT | Explicit owner 2026-10-05; no platform login/auth/runtime/server code in current app; GitHub/Pages build and live checks |
 | R17 | current / P0 | Deliver an installable signed Android APK | Explicit owner 2026-10-05; release build/lint, signature/manifest checks, observed emulator/device scope |
 | R18 | current / P0 | Suitable cohesive style/icon with readable controls | Explicit owner 2026-10-05; open-door mark, warm paper/dark ink, common line icons; existing readability/home constraints retained |
 | R19 | current / P1 | Propose revenue and user-return motivation | Explicit owner 2026-10-05; concrete thematic-pack hypothesis, useful free core, voluntary return pilot; billing not implemented |
 | R20 | current / P0 | Keep APK diary local and recoverable | Inferred from standalone/diary requirements; packaged assets, no data API or user/data-access permissions, compatible JSON export/import through system picker |
+| R22 | current / P0 | Remove single-messenger dependency | Owner 2026-10-07 (Moscow): Android chooser, Web Share and copy/selectable text fallback, explicit no-list answer; compatible APK/site/store copy |
 | R21 | current / P0 | Prepare truthful RuStore screenshots, icon and Russian listing copy | Owner 2026-10-06; real Android captures, opaque matching icon, 30/80/4000 limits, matching APK label, saved pack; no submission yet |
 
 
@@ -40,3 +41,5 @@ Review when: the user changes scope, the meaning of data changes or a requiremen
 2026-10-05: R09/R11–R14 are revised; R15–R16 follow the explicit surprise/existing-messenger/standalone-product request. Custom chat, platform access/invites and separate server defaults are superseded. The optional external-versus-embedded messenger question returned no answer; Telegram links are the documented default, not a claimed preference answer. Historical source commits and old hosted data are preserved.
 
 2026-10-05: R17–R20 follow «Давай создадим APK … стиль и иконки … как зарабатывать … мотивация». Optional audience/distribution answers were empty: adult novelty/direct-install pilot are documented defaults; no store publication, account creation, payment or analytics deployment is implied.
+
+2026-10-07 (Moscow): R11/R12/R14 revised and R22 added from «У нас друзья телеграмм, а он разрешен? Ну лучше сделать универсальным поделиться?» and explicit optional answer «Без списка». The OS/user chooses recipients; no existing local contact data deletion is authorised. Current Telegram RuStore listing is evidence of listing availability, not legal advice or a guarantee of this app’s moderation.

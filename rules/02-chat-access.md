@@ -1,27 +1,24 @@
-# 02 — Existing messenger boundary
+# 02 — Universal sharing boundary
 
-## Purpose
+## Purpose and scope
 
-Use a real existing messenger without inventing accounts, conversations, delivery or a private-data transfer.
-
-## Applies to
-
-public/friends.mjs, public/contacts.mjs and public/links.mjs.
+Use existing applications without owning accounts/conversations/delivery or transferring private records. Applies to public/friends.mjs, links.mjs, sharing.mjs, android.mjs and MainActivity.
 
 ## Mandatory rules
 
-- Read/write only the separate contact key; never diary state or notes.
-- Validate/bound names and usernames; escape user text. Reject arbitrary destinations and reserved Telegram paths.
-- Build fixed HTTPS Telegram links. Drafts contain only known public catalog titles/links, never local notes.
-- A click opens Telegram; the user chooses/sends there. No automatic navigation, message-send API, bot token, embedded SDK or contact lookup.
-- Explain that contacts are browser-local shortcuts and conversations open in Telegram. Do not fabricate message history/unread counts or verified identities.
-- Do not overwrite unreadable contact data; report failed persistence without a saved claim.
+- Accept only a known authored mission id. Share public title/invitation/canonical link; never diary/notes/contacts, arbitrary text/URLs, recipient or account data.
+- Require a user action. Native Android uses ACTION_SEND/text/plain and a system chooser without a fixed provider. Browser uses Web Share when supported; clipboard/selectable-text fallback is truthful.
+- Canceling Web Share does not copy, navigate or report sending. Failed/unavailable sharing offers selectable public text; only successful clipboard writes claim copying.
+- No address book, contact lookup, messaging SDK/API, automatic send, fake inbox/unread count or delivery claim. Leave retired contact storage untouched.
+- Native origin/main-frame checks stay enforced; only the mission id crosses the share bridge. Host payload comes from bounded generated bundled catalog data.
 
 ## Enforcement
 
-Mechanisms: `public/contacts.mjs`, `public/links.mjs`, `scripts/verify.mjs`, `tests/contacts.test.mjs`, `tests/pages.test.mjs`.
+Mechanisms: `public/links.mjs`, `public/sharing.mjs`, `public/friends.mjs`, `scripts/verify.mjs`, `tests/sharing.test.mjs`, `tests/pages.test.mjs`, `tests/android.test.mjs` and `android/app/src/androidTest/java/ru/bureau/otherlives/OfflineSmokeTest.java`. Tests cover unknown inputs, exact public payloads, silent cancellation, denied copy/selectable fallback, untouched diary/legacy contacts, id-only protocol and native chooser extras. Actual app availability/delivery stays outside these test claims. Review when data, chooser, providers or recipients change.
 
-Tests assert validation, separate storage keys, no arbitrary links, encoded catalog drafts, failed-storage truth and no state write/network call during sharing. Real identity, client availability and delivery are Telegram/user acceptance, not claims from unit tests.
+## Superseded Telegram default — 2026-10-07
+
+Owner explicitly selected universal sharing without a separate contact list. The previous fixed t.me/contact CRUD implementation and tests describe an earlier contract and are replaced by sharing/privacy/cancel tests. Git history retains the retired implementation; existing stored contact bytes are not modified. No message was sent or recipient selected during verification.
 
 ## Superseded policy — 2026-10-04
 

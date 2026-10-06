@@ -12,7 +12,7 @@
 
 Mechanisms: `public/links.mjs`, `scripts/build-pages.mjs`, `scripts/verify.mjs`, `tests/pages.test.mjs`, `.github/workflows/pages.yml`.
 
-The verifier/build tests inspect served output for retired auth/server paths and complete relative references. The assembled app test rejects state writes/network calls on deep links/sharing. Source/tests/build precede Pages deployment. Rule 02 owns Telegram links.
+The verifier/build tests inspect served output for retired auth/server paths and complete relative references. The assembled app test rejects state writes/network calls on deep links/sharing. Source/tests/build precede Pages deployment. Rule 02 owns public-only universal sharing.
 
 ## Superseded policy — 2026-10-04
 

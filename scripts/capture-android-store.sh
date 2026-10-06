@@ -3,7 +3,7 @@ set -euo pipefail
 capture_root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$capture_root"
 mkdir -p out/store-capture
-cp android/app/build/outputs/apk/release/app-release-unsigned.apk out/store-capture/bureau-0.4.1-unsigned.apk
+cp android/app/build/outputs/apk/release/app-release-unsigned.apk out/store-capture/bureau-0.4.2-unsigned.apk
 git rev-parse HEAD >out/store-capture/source-commit.txt
 sdk_path="${ANDROID_HOME:?ANDROID_HOME must point to the SDK}"
 capture_avd_root="$capture_root/out/android-store-avd"
@@ -49,5 +49,5 @@ done
 "$adb" -s emulator-5556 shell -n wm size >out/store-capture/display.txt
 "$adb" -s emulator-5556 pull /sdcard/Android/data/ru.bureau.otherlives.debug/files/store-screens out/store-capture/screenshots
 "$adb" -s emulator-5556 pull /sdcard/Android/data/ru.bureau.otherlives.debug/files/store-icon.png out/store-capture/icon-512.png
-grep -q 'OK (3 tests)' out/store-capture/instrumentation.txt
+grep -q 'OK (4 tests)' out/store-capture/instrumentation.txt
 test "$(find out/store-capture/screenshots -name '*.png' | wc -l)" -eq 5

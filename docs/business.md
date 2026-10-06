@@ -2,7 +2,7 @@
 
 This is a personal concept trial without payments, entitlements, advertising or billable AI. No validated monetisation, demand or success claim.
 
-The owner authorised a public GitHub product and website. Messaging uses existing Telegram accounts via explicit outgoing links; no new paid host, bot, subscription or recipient message was purchased/sent. Contacts/diary stay local and are not published to Git. Telegram receives only a selected public catalog mission draft after a user click; the user decides whether to send it.
+The owner authorised a public GitHub product and website. Sharing uses the chosen installed application through an explicit device/browser action. No new service, bot, subscription or recipient message was purchased/sent. Diary/notes stay local and are not published to Git. Only a selected public mission invitation/link is passed; the user chooses whether to send it. Removing a Telegram-only address book adds no payment, analytics or recipient-data collection.
 
 The next useful observation is whether the owner completes a mission and voluntarily chooses another. Monetary service limits were not researched for this task. Review when payments, data sharing, an AI provider or commercial scope is requested. [Product](product.md), [market](market.md).
 

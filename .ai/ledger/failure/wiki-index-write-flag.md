@@ -4,13 +4,14 @@ id: wiki-index-write-flag
 title: Wiki index rejects unsupported write flag
 occurrences:
   - 2026-10-04 (self-report)
+  - 2026-10-07 (self-report) - Universal-sharing batch repeated the unsupported --write flag; inspected help and used index with no flag. No product files changed by failed command.
 sources:
   - self-report
 ---
 
 # Wiki index rejects unsupported write flag
 
-**Seen 1 time(s):** 2026-10-04 (self-report)
+**Seen 2 time(s):** 2026-10-04 (self-report), 2026-10-07 (self-report) - Universal-sharing batch repeated the unsupported --write flag; inspected help and used index with no flag. No product files changed by failed command.
 
 ## Symptom
 
@@ -39,3 +40,7 @@ Observed self-report, 2026-10-04
 ## Status
 
 fixed
+
+## Recurrence resolution — 2026-10-07
+
+Agent /root repeated the unsupported flag during universal-sharing index refresh (exit 2), then inspected help and successfully used `akinator_wiki.py index` (exit 0). Distillation decision: neither a new skill nor product rule; this is an existing CLI invocation mistake, with the correct signature recorded here and in the operations refresh procedure. No user product preference or approval is inferred. Review the advertised help if the installed plugin version changes.

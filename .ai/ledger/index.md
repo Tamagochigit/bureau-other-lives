@@ -26,3 +26,4 @@ Regenerate when a ledger record is added or changed.
 - [requirement: readability and scope](requirement/readability-and-scope.md)
 - [requirement: rustore listing assets](requirement/rustore-listing-assets.md)
 - [requirement: standalone products](requirement/standalone-products.md)
+- [requirement: universal sharing](requirement/universal-sharing.md)

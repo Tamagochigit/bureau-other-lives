@@ -10,19 +10,9 @@ export function connectAndroid({onImport, onStatus}) {
       else if (response.type === 'status' && typeof response.text === 'string') onStatus(response.text);
     } catch { onStatus('Не удалось прочитать ответ приложения. Дневник сохранён.'); }
   };
-  document.addEventListener('click', event => {
-    const link = event.target.closest?.('a[href]');
-    if (!link) return;
-    try {
-      const url = new URL(link.href);
-      if (url.protocol === 'https:' && url.hostname === 't.me') {
-        event.preventDefault();
-        send({type:'open-url', url:url.href});
-      }
-    } catch { /* Relative application navigation stays in the WebView. */ }
-  }, true);
   return {
     exportDiary: text => send({type:'export', text}),
     importDiary: () => send({type:'import'}),
+    shareMission: id => send({type:'share-mission', id}),
   };
 }

@@ -1,6 +1,5 @@
 import { MISSIONS } from './data.mjs';
 import { FRONTEND_URL } from './runtime-config.mjs';
-import { telegramUsername } from './contacts.mjs';
 
 export function incomingLinks(search = '') {
   const params = new URLSearchParams(search);
@@ -20,18 +19,7 @@ export function missionDraft(id) {
   return mission ? `Давай попробуем «${mission.title}» вместе!\n${missionLink(id)}` : '';
 }
 
-export function telegramChatLink(username, id = '') {
-  const url = new URL('https://t.me/' + telegramUsername(username));
-  const draft = missionDraft(id);
-  if (draft) url.searchParams.set('text', draft);
-  return url.href;
-}
-
-export function telegramShareLink(id) {
+export function missionShareData(id) {
   const mission = MISSIONS.find(item => item.id === id);
-  if (!mission) return '';
-  const url = new URL('https://t.me/share/url');
-  url.searchParams.set('url', missionLink(id));
-  url.searchParams.set('text', `Давай попробуем «${mission.title}» вместе!`);
-  return url.href;
+  return mission ? { title: mission.title, text: `Давай попробуем «${mission.title}» вместе!`, url: missionLink(id) } : null;
 }

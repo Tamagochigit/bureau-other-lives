@@ -4,6 +4,8 @@ Canonical source/history: https://github.com/Tamagochigit/bureau-other-lives. Pr
 
 ## Develop and publish
 
+Knowledge refresh uses `node scripts/extract-context.mjs`, `node scripts/build-brief.mjs` and the installed Akinator `scripts/akinator_wiki.py index`. The index command writes by default and has no `--write` flag; inspect `index --help` on plugin updates. Do not add a duplicate repository skill or hook for this routine procedure.
+
 Clone normally. Use Node 22.13+ (CI Node 24), `npm run dev` and http://127.0.0.1:3000. No dependency install is required. The local server binds loopback, serves the selected static directory and accepts only GET/HEAD. It has no application API.
 
 After a coherent change run `npm run verify`, then `npm run build`. Preview the deployable output with `npm start`. Commit/push normally to main. `.github/workflows/pages.yml` checks source and tests, builds out/pages, uploads only that directory and deploys Pages. Pull requests verify/build without deployment. Inspect the run for the exact commit, then fetch live HTML/assets, check status/MIME and compare hashes to the verified build. A green local suite alone does not prove publication.
@@ -14,7 +16,7 @@ Changing the address requires runtime-config.mjs, link tests and the related dec
 
 ## Recover data and releases
 
-Keep the diary storage key/schema v1. Export JSON through settings before changing device/origin or clearing storage. Import validates and merges completed records; no automatic cross-origin diary transfer exists. Contacts are local and are not in diary exports. Removing a shortcut does not delete Telegram conversation history; unreadable contact storage is not overwritten silently.
+Keep the diary storage key/schema v1. Export JSON through settings before changing device/origin or clearing storage. Import validates/merges completed records; no automatic cross-origin transfer exists. Universal sharing never includes local notes or recipient data. Retired `other-lives:contacts:v1` stays untouched; do not remove it as part of this UI change. Existing external conversations remain with their chosen applications.
 
 Rollback a code regression with an ordinary revert and the same Pages workflow. Select a standalone release; historical pre-0.3 releases depended on the retired platform. Never force-push the preserved source history or store notes/contacts/messages in Git.
 

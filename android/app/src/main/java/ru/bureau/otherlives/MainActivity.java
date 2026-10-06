@@ -2,6 +2,7 @@ package ru.bureau.otherlives;
 
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Insets;
@@ -34,6 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Collections;
 import org.json.JSONObject;
+import org.json.JSONArray;
 
 /** Only packaged application assets can execute; the bridge has one exact HTTPS origin. */
 public final class MainActivity extends ComponentActivity {
@@ -90,7 +92,6 @@ public final class MainActivity extends ComponentActivity {
             }
             @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 if (isLocal(request.getUrl())) return false;
-                if (request.hasGesture()) openTelegram(request.getUrl());
                 return true;
             }
             @Override public boolean onRenderProcessGone(WebView view, RenderProcessGoneDetail detail) {
@@ -130,7 +131,7 @@ public final class MainActivity extends ComponentActivity {
                     switch (request.getString("type")) {
                         case "export" -> chooseExport(request.getString("text"), reply);
                         case "import" -> chooseImport(reply);
-                        case "open-url" -> openTelegram(Uri.parse(request.getString("url")));
+                        case "share-mission" -> startActivity(missionShareIntent(MainActivity.this, request.getString("id")));
                         default -> respond(reply, "status", "Неизвестное действие.", false);
                     }
                 } catch (Exception error) { respond(reply, "status", "Не удалось выполнить действие.", false); }
@@ -145,15 +146,27 @@ public final class MainActivity extends ComponentActivity {
         return "https".equals(uri.getScheme()) && "appassets.androidplatform.net".equals(uri.getHost())
             && uri.getUserInfo() == null && uri.getPort() == -1 && uri.getPath() != null && uri.getPath().startsWith("/assets/");
     }
-    static boolean isTelegram(Uri uri) {
-        return "https".equals(uri.getScheme()) && "t.me".equals(uri.getHost()) && uri.getUserInfo() == null
-            && uri.getPort() == -1 && uri.getFragment() == null && uri.toString().length() <= 12_000
-            && uri.getPath() != null && (uri.getPath().matches("/[A-Za-z][A-Za-z0-9_]{3,31}") || "/share/url".equals(uri.getPath()));
-    }
-    private void openTelegram(Uri uri) {
-        if (!isTelegram(uri)) { Toast.makeText(this, "Эта ссылка недоступна.", Toast.LENGTH_SHORT).show(); return; }
-        try { startActivity(new Intent(Intent.ACTION_VIEW, uri).addCategory(Intent.CATEGORY_BROWSABLE)); }
-        catch (ActivityNotFoundException error) { Toast.makeText(this, "Установи Telegram или браузер, чтобы открыть переписку.", Toast.LENGTH_LONG).show(); }
+    static Intent missionShareIntent(Context context, String id) throws Exception {
+        if (id == null || !id.matches("[a-z0-9-]{1,80}")) throw new IllegalArgumentException("Unknown mission");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        try (InputStream in = context.getAssets().open("share-missions.json")) {
+            byte[] buffer = new byte[4096]; int read;
+            while ((read = in.read(buffer)) != -1) {
+                if (bytes.size() + read > 128_000) throw new IllegalArgumentException("Invalid catalog");
+                bytes.write(buffer, 0, read);
+            }
+        }
+        JSONArray catalog = new JSONArray(new String(bytes.toByteArray(), StandardCharsets.UTF_8));
+        for (int i = 0; i < catalog.length(); i++) {
+            JSONObject mission = catalog.getJSONObject(i);
+            if (!id.equals(mission.getString("id"))) continue;
+            Intent send = new Intent(Intent.ACTION_SEND).setType("text/plain")
+                .putExtra(Intent.EXTRA_TITLE, mission.getString("title"))
+                .putExtra(Intent.EXTRA_SUBJECT, mission.getString("title"))
+                .putExtra(Intent.EXTRA_TEXT, mission.getString("text") + "\n" + mission.getString("url"));
+            return Intent.createChooser(send, "Поделиться миссией");
+        }
+        throw new IllegalArgumentException("Unknown mission");
     }
     private void chooseExport(String text, JavaScriptReplyProxy reply) {
         if (pendingReply != null) { respond(reply, "status", "Сначала закончи работу с предыдущим файлом.", false); return; }

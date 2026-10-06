@@ -6,7 +6,7 @@ Prevent diary uploads, lost recovery records and fabricated profile metrics.
 
 ## Applies to
 
-public/app.mjs, public/core.mjs and public/data.mjs; contacts/messenger links follow rule 02.
+public/app.mjs, public/core.mjs and public/data.mjs; public mission sharing follows rule 02.
 
 ## Mandatory rules
 
@@ -14,13 +14,13 @@ public/app.mjs, public/core.mjs and public/data.mjs; contacts/messenger links fo
 - Validate backup schema and merge records without clearing current entries.
 - A category without recorded ratings has no inferred score.
 - All application state stays local. No browser application-data network API is authorised.
-- Contacts/friends/links cannot read diary state or receive notes/entries. Only an explicitly selected public catalog id may be shared.
+- Friends/links/sharing cannot read diary state or receive notes/entries. Only an explicitly selected public catalog id may be shared.
 
 ## Enforcement
 
-Mechanisms: `scripts/verify.mjs`, `tests/core.test.mjs`, `tests/ui.test.mjs`, `tests/contacts.test.mjs`, `tests/pages.test.mjs`.
+Mechanisms: `scripts/verify.mjs`, `tests/core.test.mjs`, `tests/ui.test.mjs`, `tests/sharing.test.mjs`, `tests/pages.test.mjs`.
 
-The verifier prohibits network calls and diary-state imports in messenger modules. Tests exercise invalid-input preservation, merge integrity, known averages, escaped text, separate contact keys and no diary leakage in the assembled sharing flow. No Git hook.
+The verifier prohibits network calls and diary-state imports in sharing modules. Tests exercise invalid-input preservation, merge integrity, known averages, escaped text, untouched retired contacts and no diary leakage in the assembled sharing flow. No Git hook.
 
 ## History
 

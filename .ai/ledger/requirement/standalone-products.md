@@ -20,4 +20,4 @@ Owner 2026-10-05: Удиви меня, no home time selection, no custom/ChatGPT
 
 ## Acceptance
 
-R09/R11–R16 in docs/requirements.md; Telegram links are a stated default. Same diary v1, complete Git history, standalone checks/build, GitHub Pages publication and live bytes.
+R09/R11–R16 in docs/requirements.md; The initial Telegram default was superseded by [universal-sharing](universal-sharing.md) on 2026-10-07; no-list choice was explicit. Same diary v1, complete Git history, standalone checks/build, GitHub Pages publication and live bytes.

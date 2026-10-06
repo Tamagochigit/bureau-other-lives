@@ -62,7 +62,7 @@ public final class OfflineSmokeTest {
         reload(false);
         assertEquals("true", js("JSON.parse(localStorage.getItem('other-lives:state:v1')).entries[0].note==='Android offline test'"));
         click("[data-action=settings]");
-        assertEquals("true", js("document.querySelector('#dialog-content').innerText.includes('Android 0.4.1')"));
+        assertEquals("true", js("document.querySelector('#dialog-content').innerText.includes('Android " + BuildConfig.VERSION_NAME + "')"));
         assertEquals("true", js("window.bureauAndroidBack()"));
         assertEquals("false", js("document.querySelector('#detail-dialog').open"));
         js("location.hash='friends'");Thread.sleep(150);
@@ -73,8 +73,24 @@ public final class OfflineSmokeTest {
         assertTrue(MainActivity.isLocal(Uri.parse("https://appassets.androidplatform.net/assets/index.html")));
         assertFalse(MainActivity.isLocal(Uri.parse("https://appassets.androidplatform.net.evil/assets/index.html")));
         assertFalse(MainActivity.isLocal(Uri.parse("file:///etc/passwd")));
-        assertTrue(MainActivity.isTelegram(Uri.parse("https://t.me/friend_name?text=hello")));
-        for(String url:new String[]{"javascript:alert(1)","intent://t.me/friend_name","http://t.me/friend_name","https://t.me@evil.example/friend_name","https://t.me:443/friend_name"}) assertFalse(url,MainActivity.isTelegram(Uri.parse(url)));
+        for(String url:new String[]{"javascript:alert(1)","intent://example.com", "https://example.com/assets/index.html", "https://appassets.androidplatform.net:443/assets/index.html"}) assertFalse(url,MainActivity.isLocal(Uri.parse(url)));
+    }
+    @Test public void testShareChooserUsesBundledPublicMissionOnly() throws Exception {
+        Intent chooser=MainActivity.missionShareIntent(activity,"quiet-tea");
+        assertEquals(Intent.ACTION_CHOOSER,chooser.getAction());
+        Intent send=chooser.getParcelableExtra(Intent.EXTRA_INTENT);
+        assertNotNull(send);
+        assertEquals(Intent.ACTION_SEND,send.getAction());
+        assertEquals("text/plain",send.getType());
+        assertNull(send.getPackage());
+        assertNull(send.getData());
+        assertFalse(send.hasExtra(Intent.EXTRA_STREAM));
+        assertEquals(3,send.getExtras().size());
+        assertTrue(send.getStringExtra(Intent.EXTRA_TEXT).endsWith("\nhttps://tamagochigit.github.io/bureau-other-lives/?mission=quiet-tea#missions"));
+        for(String id:new String[]{"unknown-mission","javascript:alert(1)","PRIVATE NOTE", "https://example.com"}) {
+            try { MainActivity.missionShareIntent(activity,id); fail("Unknown mission must not open a chooser: "+id); }
+            catch(IllegalArgumentException expected) { /* No outgoing intent for untrusted input. */ }
+        }
     }
     @After public void tearDown() throws Exception {
         if(activity!=null)getInstrumentation().runOnMainSync(activity::finish);

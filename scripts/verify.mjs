@@ -21,12 +21,13 @@ for (const file of await readdir('public')) {
   if (/\b(?:fetch|XMLHttpRequest|WebSocket|sendBeacon)\s*\(/.test(source)) throw new Error('No application-data network API is authorised: ' + file);
   if (/chatgpt|neurozona|signin-with|\/api\/social|CHAT_SERVICE_URL|DEPLOYMENT_MODE/i.test(source)) throw new Error('Removed hosting/auth dependency remains: ' + file);
 }
-for (const file of ['friends','contacts','links']) {
+for (const file of ['friends','links','sharing']) {
   const source = await readFile('public/' + file + '.mjs','utf8');
-  if (/\b(?:STORAGE_KEY|decodeState|backup|importBackup)\b/.test(source) || /other-lives:state:v1/.test(source)) throw new Error('Messenger shortcuts must not read diary storage: ' + file);
+  if (/\b(?:STORAGE_KEY|decodeState|backup|importBackup|localStorage)\b/.test(source) || /other-lives:state:v1/.test(source)) throw new Error('Sharing must not read diary or contacts: ' + file);
+  if (/t\.me|telegram|username/i.test(source)) throw new Error('Sharing must not depend on one messenger: ' + file);
 }
 const app = await readFile('public/app.mjs','utf8');
 if (/[\u00A7\u00A4]/.test(app)) throw new Error('Template placeholders remained in source.');
 const pkg = JSON.parse(await readFile('package.json','utf8'));
 if (Object.keys(pkg.dependencies || {}).length || Object.keys(pkg.devDependencies || {}).length) throw new Error('Standalone build has no runtime/package dependencies.');
-console.log('Verified syntax, diary/recovery, surprise start, Telegram contact links, explicit sharing and standalone assets.');
+console.log('Verified syntax, diary/recovery, surprise start, universal explicit sharing and standalone assets.');

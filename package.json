@@ -1,9 +1,9 @@
 {
   "name": "bureau-of-other-lives",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "private": true,
   "type": "module",
-  "description": "Маленькие приключения, личный дневник и друзья в Telegram.",
+  "description": "Маленькие приключения, личный дневник и идеи для друзей.",
   "engines": {
     "node": ">=22.13.0"
   },

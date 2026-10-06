@@ -6,7 +6,7 @@ Home has one full-width surprise button and a short description. Active progress
 
 Body/buttons use 1.125rem (18px at the browser default); secondary copy is 1rem and compact navigation .875rem. Narrow breakpoints do not shrink text. Controls remain at least 48px with visible focus. The existing opaque colours and readable dialog instructions are preserved.
 
-Friends looks like a simple contact list: chosen name, @username and «Написать». Add/edit uses two labelled fields; secondary contact actions sit in a disclosure. A selected mission shows a clear Telegram draft/chooser action. Outgoing links open another tab so the website remains available. Copy explicitly says the conversation opens in Telegram; no imitation inbox or fabricated unread counts. Errors retain typed input; failed storage reports that contacts last only for the visit.
+Friends shows existing ideas for joint activities and a mission-selection action, without contact fields/list. Each mission has «Поделиться». Android presents its ordinary chooser; browsers share where supported, otherwise copy text/link. A denied/unavailable clipboard exposes a labelled readonly textarea at the ordinary body font size plus «Скопировать текст». Canceling the native/browser chooser leaves the mission open and does not report delivery. Three existing joint traditions offer occasions, without adding home panels.
 
 Desktop uses a left rail; narrow screens use five bottom items with safe-area spacing and one-column cards. Native dialogs manage modal focus; reduced-motion rules and browser zoom remain available. Responsive CSS and event tests are not proof of actual browser/device layout. See [testing](testing.md) for observed evidence.
 

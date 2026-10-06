@@ -1,6 +1,6 @@
 # Application router
 
-Use Akinator for repository changes when available. Keep code and its knowledge delta together. This is a standalone GitHub Pages product: local diary, surprise missions and shortcuts to existing Telegram conversations.
+Use Akinator for repository changes when available. Keep code and its knowledge delta together. This is a standalone GitHub Pages product: local diary, surprise missions and explicit universal sharing of public catalog missions.
 
 - [Overview and development](README.md).
 - [Product](docs/product.md), [requirements](docs/requirements.md) and [UX](docs/ux.md).

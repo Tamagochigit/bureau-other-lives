@@ -38,9 +38,10 @@ test('the static build has complete relative assets and no former auth/server de
 test('the published app opens and shares instructions without changing or leaking the existing diary', async t => {
   const output=await mkdtemp(join(tmpdir(),'bureau-pages-ui-'));
   t.after(()=>rm(output,{recursive:true,force:true}));
-  const keys=['document','location','window','localStorage','setTimeout','clearTimeout','fetch'];
+  const keys=['document','location','window','localStorage','setTimeout','clearTimeout','fetch','navigator'];
+  const navigatorDescriptor=Object.getOwnPropertyDescriptor(globalThis,'navigator');
   const originals=Object.fromEntries(keys.map(key=>[key,globalThis[key]]));
-  t.after(()=>Object.assign(globalThis,originals));
+  t.after(()=>{for(const key of keys.filter(key=>key!=='navigator'))globalThis[key]=originals[key];if(navigatorDescriptor)Object.defineProperty(globalThis,'navigator',navigatorDescriptor);else delete globalThis.navigator;});
   await buildPages(output);
   const handlers={},elements=new Map();
   class Element {
@@ -56,7 +57,10 @@ test('the published app opens and shares instructions without changing or leakin
   const diary=completeMission(beginMission(emptyState(),'detail-hunter'),{rating:4,repeat:false,note:'PRIVATE NOTE'},'2026-10-04T11:00:00Z','saved-note');
   const saved=JSON.stringify(diary);
   const reads=[];
-  globalThis.localStorage={getItem:key=>{reads.push(key);return key===STORAGE_KEY?saved:null;},setItem(){assert.fail('Opening/sharing must not change diary or contacts');}};
+  const contacts=JSON.stringify({version:1,contacts:[{name:'PRIVATE CONTACT',username:'privatecontact'}]});
+  const stored=new Map([[STORAGE_KEY,saved],['other-lives:contacts:v1',contacts]]);
+  globalThis.localStorage={getItem:key=>{reads.push(key);return stored.get(key)||null;},setItem(){assert.fail('Opening/sharing must not change diary or contacts');},removeItem(){assert.fail('Retired contact data must be left untouched');}};
+  Object.defineProperty(globalThis,'navigator',{configurable:true,value:{}});
   globalThis.setTimeout=()=>0;globalThis.clearTimeout=()=>{};
   globalThis.fetch=()=>assert.fail('No application-data request is allowed');
   const appUrl=pathToFileURL(join(output,'app.js')).href;
@@ -66,14 +70,27 @@ test('the published app opens and shares instructions without changing or leakin
   await handlers.click({target:{closest:()=>({dataset:{action:'share-mission',id:'quiet-tea'}})}});
   assert.equal(element('#detail-dialog').open,false);
   const friends=element('#main').innerHTML;
-  assert.match(friends,/https:\/\/t.me\/share\/url\?/);
-  assert.match(friends,/Выбрать чат в Telegram/);
+  assert.match(friends,/id="share-text"[^>]*readonly/);
+  assert.match(friends,/https:\/\/tamagochigit.github.io\/bureau-other-lives\/\?mission=quiet-tea#missions/);
+  assert.match(friends,/Скопировать текст/);
+  assert.doesNotMatch(friends,/Telegram|t\.me|friend-form|PRIVATE CONTACT|privatecontact/i);
   assert.ok(!friends.includes('PRIVATE NOTE'));
   assert.ok(!friends.includes('chat-message-form'));
-  assert.deepEqual([...new Set(reads)].sort(),['other-lives:contacts:v1',STORAGE_KEY].sort());
+  assert.deepEqual([...new Set(reads)],[STORAGE_KEY]);
+  assert.equal(stored.get('other-lives:contacts:v1'),contacts);
+  assert.equal(stored.get(STORAGE_KEY),saved);
+  const nativeRequests=[];
+  globalThis.window.BureauAndroid={postMessage:raw=>nativeRequests.push(JSON.parse(raw))};
+  globalThis.location={search:'?mission=quiet-tea',hash:'#missions'};
+  await import(appUrl+'?native-share');
+  await handlers.click({target:{closest:()=>({dataset:{action:'share-mission',id:'quiet-tea'}})}});
+  assert.deepEqual(nativeRequests,[{type:'share-mission',id:'quiet-tea'}]);
+  assert.equal(element('#detail-dialog').open,true);
+  assert.equal(globalThis.location.hash,'#missions');
   await handlers.click({target:{closest:()=>({dataset:{action:'settings'}})}});
   assert.doesNotMatch(element('#dialog-content').innerHTML,/chatgpt|прежнем сайте/i);
   element('#detail-dialog').close();
+  delete globalThis.window.BureauAndroid;
   globalThis.location={search:'?mission=javascript:alert(1)&offer=unknown&join=old',hash:''};
   await import(appUrl+'?invalid-mission');
   assert.equal(element('#detail-dialog').open,false);

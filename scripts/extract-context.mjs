@@ -1,7 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { MISSIONS, TRADITIONS, CATEGORIES } from '../public/data.mjs';
 import { STORAGE_KEY, MAX_ENTRIES } from '../public/core.mjs';
-import { CONTACTS_KEY, MAX_CONTACTS } from '../public/contacts.mjs';
 import { FRONTEND_URL } from '../public/runtime-config.mjs';
 import { MODULES, ASSETS } from './build-pages.mjs';
 const app=await readFile('public/app.mjs','utf8');
@@ -23,20 +22,20 @@ const content=[
   '- Publication workflow: .github/workflows/pages.yml',
   '- Node engine: '+pkg.engines.node+'; CI: Node 24; package dependencies: '+Object.keys({...pkg.dependencies,...pkg.devDependencies}).length,
   '- Diary key: `'+STORAGE_KEY+'`; max entries: '+MAX_ENTRIES,
-  '- Contact key: `'+CONTACTS_KEY+'`; max contacts: '+MAX_CONTACTS,
+  '- Contacts: no address book; retired other-lives:contacts:v1 is not read, written or deleted.',
   '- Browser views: '+views.join(', '),
   '- Primary navigation: '+JSON.parse(app.match(/\['home','missions','friends','compass','diary'\]/)?.[0].replaceAll("'",'"') || '[]').join(', '),
   '- Home controls: '+[...app.slice(app.indexOf('function homePage()'),app.indexOf('function missionsPage()')).matchAll(/data-action="([^"]+)"/g)].map(match=>match[1]).join(', '),
   '- Home selectors: '+(app.includes('home-time') || app.includes('home-place') ? 'present' : 'none'),
   '- Missions: '+MISSIONS.length+'; traditions: '+TRADITIONS.length+'; categories: '+Object.keys(CATEGORIES).join(', '),
-  '- Messaging: explicit HTTPS Telegram username/share links; no in-product message storage/API',
+  '- Sharing: native Android chooser; Web Share API where supported; clipboard/selectable text fallback. Only public catalog missions; no message storage/API.',
   '- Android applicationId: '+android.match(/applicationId '([^']+)'/)[1]+'; version: '+android.match(/versionName '([^']+)'/)[1]+' ('+android.match(/versionCode (\d+)/)[1]+')',
   '- Android SDK: min '+android.match(/minSdk (\d+)/)[1]+'; target '+android.match(/targetSdk (\d+)/)[1]+'; compile '+android.match(/compileSdk (\d+)/)[1],
   '- Android dependencies: WebKit '+android.match(/webkit:webkit:([^']+)/)[1]+'; Activity '+android.match(/activity:activity:([^']+)/)[1]+'; AGP '+gradle.match(/version '([^']+)'/)[1]+'; Gradle '+wrapper.match(/gradle-([0-9.]+)-bin/)[1],
   '- Android origin: '+host.match(/ORIGIN = \"([^\"]+)\"/)[1]+'; native actions: '+[...host.matchAll(/case \"([^\"]+)\"/g)].map(match=>match[1]).join(', '),
   '- Android output: generated out/android-assets; host android/app; workflow .github/workflows/android.yml',
   '- Android records are separate from website storage; compatible JSON backup transfer is explicit.',
-  '- Contacts are separate from diary backups; notes remain local.','',
+  '- Sharing never reads diary/notes or recipient data; compatible diary backups remain local and explicit.','',
 ].join('\n');
 await mkdir('context',{recursive:true});
 await writeFile('context/application.md',content);
