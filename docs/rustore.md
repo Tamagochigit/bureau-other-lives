@@ -25,3 +25,9 @@ Run the Android workflow with capture_store_assets=true, or a commit tagged [sto
 Actual results live in [testing](testing.md) and [changes](changes.md). A declared test or draft is not a passed capture or approved moderation. Review when catalog/copy, icon/label, package/version/key, capture method, store rules or data practices change.
 
 References: [publication](https://www.rustore.ru/help/developers/publishing-and-verifying-apps/app-publication), [moderation](https://www.rustore.ru/help/developers/publishing-and-verifying-apps/requirement-apps), [categories](https://www.rustore.ru/help/developers/publishing-and-verifying-apps/app-publication/new-version-app/category), [content rating](https://www.rustore.ru/help/developers/publishing-and-verifying-apps/app-publication/new-version-app/age-restrictions).
+
+## Before submission
+
+The store data/privacy fields must reflect local diary/ratings/contacts and explicit file/Telegram actions, not a blanket no-data claim. The prepared kit includes an explicitly labelled policy draft, but developer identity/contact and a published policy accessible from the listing and app remain owner/release work. Official moderation section 5.1 applies when personal data are collected or processed; local operation alone is not asserted as an exemption. No legal identity, contact or compliance approval is invented.
+
+Capture location is explicit ANDROID_AVD_HOME plus create --path; the script checks INI/list discovery before launch. Run 37495734206 built/linted candidate and tests but emulator could not find the default AVD, so capture/runtime proof is absent for that run. Retry success is recorded separately.
