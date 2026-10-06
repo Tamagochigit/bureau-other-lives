@@ -78,7 +78,8 @@ public final class StoreScreenshotsTest {
     private void click(String selector) throws Exception {js("document.querySelector("+JSONObject.quote(selector)+").click()");}
     private void navigate(String view) throws Exception {
         click("#navigation a[href='#"+view+"']");
-        await("location.hash==="+JSONObject.quote("#"+view));
+        String label=view.equals("missions")?"Миссии":view.equals("diary")?"Дневник":"Компас";
+        await("location.hash==="+JSONObject.quote("#"+view)+" && document.querySelector('#page-label').textContent==="+JSONObject.quote(label));
     }
     private void capture(String name) throws Exception {
         instrumentation.waitForIdleSync();Thread.sleep(250);
@@ -105,7 +106,7 @@ public final class StoreScreenshotsTest {
         click("[data-action=begin]");
         for(int step=0;step<3;step++)click("[data-step='"+step+"']");
         click("[data-action=feedback]");
-        js("document.querySelector('input[name=rating][value="+rating+"]').checked=true;document.querySelector('#feedback-note').value="+JSONObject.quote(note)+";document.querySelector('#feedback-form').requestSubmit()");
+        js("document.querySelector("+JSONObject.quote("input[name=rating][value='"+rating+"']")+").checked=true;document.querySelector('#feedback-note').value="+JSONObject.quote(note)+";document.querySelector('#feedback-form').requestSubmit()");
         await("document.querySelector('#main').innerText.includes("+JSONObject.quote(note)+")");
     }
     @Test public void captureCurrentProductScreens() throws Exception {

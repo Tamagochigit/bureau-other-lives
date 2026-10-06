@@ -18,6 +18,7 @@ Regenerate when a ledger record is added or changed.
 - [failure: requirement status enum](failure/requirement-status-enum.md)
 - [failure: ui filter fixture](failure/ui-filter-fixture.md)
 - [failure: wiki index write flag](failure/wiki-index-write-flag.md)
+- [decision: distil android capture document and size](decision/distil-android-capture-document-and-size.md)
 - [requirement: android pilot and commercial hypotheses](requirement/android-pilot-and-commercial-hypotheses.md)
 - [requirement: git and friends](requirement/git-and-friends.md)
 - [requirement: github project and pages](requirement/github-project-and-pages.md)

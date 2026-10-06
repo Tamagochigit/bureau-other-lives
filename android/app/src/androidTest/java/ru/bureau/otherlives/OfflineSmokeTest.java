@@ -57,7 +57,7 @@ public final class OfflineSmokeTest {
         click("[data-action=begin]");
         assertEquals("true", js("JSON.parse(localStorage.getItem('other-lives:state:v1')).active!==null"));
         click("[data-action=feedback]");
-        js("document.querySelector('input[name=rating][value=5]').checked=true;document.querySelector('#feedback-note').value='Android offline test';document.querySelector('#feedback-form').requestSubmit()");
+        js("document.querySelector('input[name=rating][value=\"5\"]').checked=true;document.querySelector('#feedback-note').value='Android offline test';document.querySelector('#feedback-form').requestSubmit()");
         assertEquals("true", js("document.querySelector('#main').innerText.includes('Android offline test')"));
         reload(false);
         assertEquals("true", js("JSON.parse(localStorage.getItem('other-lives:state:v1')).entries[0].note==='Android offline test'"));

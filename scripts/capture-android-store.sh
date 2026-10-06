@@ -19,6 +19,13 @@ test -e /dev/kvm
 if [ ! -w /dev/kvm ]; then sudo chown "$(id -u):$(id -g)" /dev/kvm; fi
 printf 'no\n' | avdmanager create avd --force --name BureauStore --path "$capture_avd_root/BureauStore.avd" --package 'system-images;android-35;google_apis;x86_64'
 test -f "$capture_avd_root/BureauStore.ini"
+python3 - "$capture_avd_root/BureauStore.avd/config.ini" <<'PY'
+from pathlib import Path
+import sys
+path=Path(sys.argv[1]);settings={'hw.lcd.width':'1080','hw.lcd.height':'2064','hw.lcd.density':'480','hw.mainKeys':'no'}
+lines=[line for line in path.read_text().splitlines() if line.split('=',1)[0].strip() not in settings]
+path.write_text('\n'.join(lines+[key+'='+value for key,value in settings.items()])+'\n')
+PY
 "$sdk_path/emulator/emulator" -list-avds | grep -qx BureauStore
 "$sdk_path/emulator/emulator" -avd BureauStore -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader -accel on -memory 2048 -cores 2 -port 5556 >out/store-capture/emulator.log 2>&1 &
 capture_emulator_pid=$!
@@ -29,8 +36,8 @@ while [ "$("$adb" -s emulator-5556 shell -n getprop sys.boot_completed | tr -d '
   if [ "$SECONDS" -ge "$capture_deadline" ]; then "$adb" -s emulator-5556 logcat -d >out/store-capture/boot-logcat.txt; exit 1; fi
   sleep 2
 done
-"$adb" -s emulator-5556 shell -n wm density 480
-"$adb" -s emulator-5556 shell -n wm size 1080x2136
+"$adb" -s emulator-5556 shell -n wm density reset
+"$adb" -s emulator-5556 shell -n wm size reset
 "$adb" -s emulator-5556 shell -n settings put global window_animation_scale 0
 "$adb" -s emulator-5556 shell -n settings put global transition_animation_scale 0
 "$adb" -s emulator-5556 shell -n settings put global animator_duration_scale 0
