@@ -11,3 +11,5 @@ Use Akinator for repository changes when available. Keep code and its knowledge 
 Run `node scripts/verify.mjs` once after a coherent batch, then `node scripts/build-pages.mjs`. Regenerate facts with `node scripts/extract-context.mjs`, the brief with `node scripts/build-brief.mjs` and the wiki with the available Akinator indexer. No npm package installation, framework, auth provider or production application server is required. Repeated development/publication procedures live in operations; no repository-local skill duplicates them.
 
 Android changes use [android/AGENTS.md](android/AGENTS.md), [Android contract](docs/android.md) and [runtime rule](rules/04-android-boundary.md). Business/retention proposals live in [monetization](docs/monetization.md); prices and demand are hypotheses. Browser remains package-free; Android has separately pinned Gradle/SDK/WebKit dependencies.
+
+RuStore media/copy preparation uses [docs/rustore.md](docs/rustore.md); actual capture/candidate signing is separate from submission or moderation.

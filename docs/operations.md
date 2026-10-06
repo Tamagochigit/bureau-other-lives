@@ -25,3 +25,5 @@ The old hosted chat/database were left intact as historical data; their operatio
 ## Android pilot
 
 [android.md](android.md) owns local build/signing and diary transfer. .github/workflows/android.yml verifies the shared application and builds/lints an unsigned release. Private signing material is excluded from Git and backed up separately; compatible updates require the same package/key and an increased versionCode. Do not install an unsigned CI artifact or treat it as store publication. Website/Android updates use one preserved Git history; no hosted legacy data is removed. The delivered APK stays at its bundled version until installed updates.
+
+[RuStore preparation](rustore.md) adds opt-in real-device capture to the Android workflow. Owner reviews/loads the listing later; no store account, billing or submission is performed. Private signing stays local; unsigned CI captures are not installable releases.

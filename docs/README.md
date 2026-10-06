@@ -29,3 +29,5 @@ Review when: a knowledge home is added, renamed, moved or removed.
 
 - [Android](android.md) — packaged runtime, signing, installation and recovery.
 - [Motivation and monetisation](monetization.md) — testable business/return hypotheses.
+
+- [RuStore listing and real screenshot preparation](rustore.md).

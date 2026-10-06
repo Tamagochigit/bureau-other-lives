@@ -24,6 +24,7 @@ Source date: 2026-10-04, user: «Давай создадим приложени�
 | R18 | current / P0 | Suitable cohesive style/icon with readable controls | Explicit owner 2026-10-05; open-door mark, warm paper/dark ink, common line icons; existing readability/home constraints retained |
 | R19 | current / P1 | Propose revenue and user-return motivation | Explicit owner 2026-10-05; concrete thematic-pack hypothesis, useful free core, voluntary return pilot; billing not implemented |
 | R20 | current / P0 | Keep APK diary local and recoverable | Inferred from standalone/diary requirements; packaged assets, no data API or user/data-access permissions, compatible JSON export/import through system picker |
+| R21 | current / P0 | Prepare truthful RuStore screenshots, icon and Russian listing copy | Owner 2026-10-06; real Android captures, opaque matching icon, 30/80/4000 limits, matching APK label, saved pack; no submission yet |
 
 
 Append-only history: 2026-10-04 created R01–R07 in the first implementation. Inferred decisions are defaults for this prototype, not separately claimed user instructions.

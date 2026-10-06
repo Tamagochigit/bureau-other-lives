@@ -6,6 +6,11 @@ on:
   pull_request:
     paths: ['android/**', 'public/**', 'scripts/build-*.mjs', '.github/workflows/android.yml']
   workflow_dispatch:
+    inputs:
+      capture_store_assets:
+        description: 'Capture real Android screens for RuStore'
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -24,6 +29,27 @@ jobs:
       - run: node scripts/verify.mjs && node scripts/build-android-assets.mjs
       - run: ./gradlew assembleRelease lintRelease --no-daemon
         working-directory: android
+      - name: Build device tests for store capture
+        if: inputs.capture_store_assets || contains(github.event.head_commit.message, '[store-assets]')
+        run: ./gradlew assembleDebug assembleDebugAndroidTest --no-daemon
+        working-directory: android
+      - name: Install capture emulator
+        if: inputs.capture_store_assets || contains(github.event.head_commit.message, '[store-assets]')
+        run: sdkmanager emulator 'system-images;android-35;google_apis;x86_64'
+      - name: Verify offline Android flows and capture store screens
+        if: inputs.capture_store_assets || contains(github.event.head_commit.message, '[store-assets]')
+        run: bash scripts/capture-android-store.sh
+      - name: Store capture and diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bureau-rustore-capture
+          path: |
+            out/store-capture/
+            android/app/build/reports/
+            android/build/reports/dependency-verification/
+          if-no-files-found: ignore
+          retention-days: 30
       - uses: actions/upload-artifact@v4
         with:
           name: bureau-android-unsigned

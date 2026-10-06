@@ -7,3 +7,5 @@ The exact appassets origin and main-frame check guard the native file/Telegram p
 Verification: node scripts/verify.mjs; node scripts/build-android-assets.mjs; ./gradlew assembleRelease lintRelease from this directory; device/emulator smoke as described in testing. Record actual result and limits. Store publishing/billing is separate from producing this direct-install pilot.
 
 Use [application module router](app/AGENTS.md) for host/test entry points.
+
+Store assets: [RuStore](../docs/rustore.md), full matching app_name and higher versionCode. Debug capture only; never reset product records or upload keys to CI.

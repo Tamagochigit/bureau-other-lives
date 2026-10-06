@@ -18,7 +18,7 @@ Regenerate when catalog, storage, views, package or build configuration changes.
 - Home selectors: none
 - Missions: 20; traditions: 6; categories: curiosity, create, connect, slow
 - Messaging: explicit HTTPS Telegram username/share links; no in-product message storage/API
-- Android applicationId: ru.bureau.otherlives; version: 0.4.0 (4)
+- Android applicationId: ru.bureau.otherlives; version: 0.4.1 (5)
 - Android SDK: min 26; target 36; compile 36
 - Android dependencies: WebKit 1.17.1; Activity 1.12.4; AGP 8.13.2; Gradle 8.13
 - Android origin: https://appassets.androidplatform.net; native actions: export, import, open-url

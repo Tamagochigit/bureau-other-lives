@@ -39,3 +39,7 @@ npm start
 ## Android
 
 [Download APK 0.4.0](https://github.com/Tamagochigit/bureau-other-lives/raw/refs/heads/main/downloads/bureau-0.4.0.apk). APK 0.4.0 is a signed direct-install pilot with packaged offline missions and local diary data. [Android build, signing and recovery](docs/android.md); [motivation and monetisation hypotheses](docs/monetization.md). Browser records transfer through the compatible JSON backup; contacts are separate. CI produces an unsigned APK until a private product key signs it.
+
+## Карточка RuStore
+
+[Комплект и воспроизводимые снимки Android](docs/rustore.md). Название кандидата 0.4.1 — «Бюро других жизней»; результаты сборки/подписи фиксируются отдельно.
