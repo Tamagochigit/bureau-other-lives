@@ -38,7 +38,7 @@ npm start
 
 ## Android
 
-[Download APK 0.4.0](https://github.com/Tamagochigit/bureau-other-lives/raw/refs/heads/main/downloads/bureau-0.4.0.apk). APK 0.4.0 is a signed direct-install pilot with packaged offline missions and local diary data. [Android build, signing and recovery](docs/android.md); [motivation and monetisation hypotheses](docs/monetization.md). Browser records transfer through the compatible JSON backup; contacts are separate. CI produces an unsigned APK until a private product key signs it.
+[Download APK 0.4.1](https://github.com/Tamagochigit/bureau-other-lives/raw/refs/heads/main/downloads/bureau-0.4.1.apk). APK 0.4.1 is signed with the existing product key, uses the full application name and packages offline missions and local diary data. Android35 offline mission/diary/reload/Back tests passed; phone file-picker/Telegram acceptance remains separate. [RuStore assets and listing preparation](docs/rustore.md). [Android build, signing and recovery](docs/android.md); [motivation and monetisation hypotheses](docs/monetization.md). Browser records transfer through the compatible JSON backup; contacts are separate. CI produces an unsigned APK until a private product key signs it.
 
 ## Карточка RuStore
 

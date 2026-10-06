@@ -82,6 +82,7 @@ public final class StoreScreenshotsTest {
         await("location.hash==="+JSONObject.quote("#"+view)+" && document.querySelector('#page-label').textContent==="+JSONObject.quote(label));
     }
     private void capture(String name) throws Exception {
+        await("!document.querySelector('#toast').classList.contains('visible') && Number(getComputedStyle(document.querySelector('#toast')).opacity)===0");
         instrumentation.waitForIdleSync();Thread.sleep(250);
         Bitmap bitmap=Bitmap.createBitmap(1080,1920,Bitmap.Config.ARGB_8888);
         CountDownLatch latch=new CountDownLatch(1);int[] result={-1};
@@ -99,6 +100,12 @@ public final class StoreScreenshotsTest {
             assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG,100,stream));
         }
         bitmap.recycle();
+    }
+    private void scrollToContent(String selector) throws Exception {
+        String target="document.querySelector("+JSONObject.quote(selector)+")";
+        await("!!"+target);
+        js("window.scrollTo({top:window.scrollY+"+target+".getBoundingClientRect().top-16,behavior:'instant'})");
+        await("Math.abs("+target+".getBoundingClientRect().top-16)<2");
     }
     private void complete(String id,int rating,String note) throws Exception {
         navigate("missions");
@@ -123,6 +130,7 @@ public final class StoreScreenshotsTest {
         icon.recycle();
         capture("01-home.png");
         navigate("missions");
+        scrollToContent("#catalog-results");
         capture("02-missions.png");
         click("[data-action=mission][data-id=detail-hunter]");
         await("document.querySelector('#detail-dialog').open");
@@ -132,8 +140,10 @@ public final class StoreScreenshotsTest {
         complete("quiet-tea",4,"Пример: десять спокойных минут за чашкой чая.");
         complete("home-radio",5,"Пример: собрал музыку и истории для своего эфира.");
         navigate("diary");
+        scrollToContent(".diary-count");
         capture("04-diary.png");
         navigate("compass");
+        scrollToContent(".compass-grid");
         capture("05-compass.png");
     }
     @After public void stop() throws Exception {
