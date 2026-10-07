@@ -28,8 +28,10 @@ Remove only the declared debug suffix when building the expected UI text. Keep t
 
 ## Status
 
-pending verification
+fixed
 
 ## Evidence
 
 Capture artifact11450976424 ZIP SHA25685f8f5573dec448ec9e1a8cd9f70aebbd77b48b99eb261137107c90472471c89 independently downloaded/hashed; contains five current PNGs and native diagnostics. Unsigned release is present. Review if debug version suffix or visible version contract changes. This is not permission to weaken version checks.
+
+Confirmed resolution: source8b072ecb193e5c2e87d607faf34753903d13d3cf/run37545984049 passed all4native cases in32.42s, release/lint and23web. Unsigned releaseb258b4b6... is identical to the original production bytes. Exact release version, image count and behavioural gates remained intact.

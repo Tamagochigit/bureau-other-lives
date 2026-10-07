@@ -1,6 +1,6 @@
 # Android application
 
-Version 0.4.2/code 6 is being prepared as the next direct-install candidate; 0.4.1/code 5 remains the last signed artifact for Android 8+ (API 26); target/compile API 36. It uses the same authored catalog and diary schema as the website. The package is `ru.bureau.otherlives`; the debug package has `.debug`. The owner requested an APK and suitable design on 2026-10-05. The optional audience/distribution questions had no answer: adults seeking new experiences and direct-install testing are documented defaults, not owner answers. No store release was requested or submitted.
+Version 0.4.2/code 6 is the verified signed direct-install candidate for Android 8+ (API 26); target/compile API 36. It uses the same authored catalog and diary schema as the website. The package is `ru.bureau.otherlives`; the debug package has `.debug`. The owner requested an APK and suitable design on 2026-10-05. The optional audience/distribution questions had no answer: adults seeking new experiences and direct-install testing are documented defaults, not owner answers. No store release was requested or submitted.
 
 ## Runtime and data
 
@@ -14,7 +14,7 @@ Android Back closes the current dialog, returns another view to home, then leave
 
 ## Install and update
 
-Download [the signed APK](https://github.com/Tamagochigit/bureau-other-lives/raw/refs/heads/main/downloads/bureau-0.4.1.apk) on the phone and open it from Downloads. If Android asks, permit installation for the specific browser/file-manager used to open this file, then install «Бюро других жизней». No account is required. The source-specific installation permission can be disabled afterward. Keep Android System WebView current.
+Download [the signed APK](https://github.com/Tamagochigit/bureau-other-lives/raw/refs/heads/main/downloads/bureau-0.4.2.apk) on the phone and open it from Downloads. If Android asks, permit installation for the specific browser/file-manager used to open this file, then install «Бюро других жизней». No account is required. The source-specific installation permission can be disabled afterward. Keep Android System WebView current.
 
 An update installs over the existing product package; use the same signing key and increase versionCode. The debug package is separate. Do not uninstall to update; export the diary before uninstalling or clearing data. The release is a direct-install pilot, not a store submission or a promise that every supported device was tested.
 
@@ -53,8 +53,10 @@ cd android
 
 References: [packaged local content](https://developer.android.com/develop/ui/views/layout/webapps/load-local-content), [document storage](https://developer.android.com/training/data-storage/shared/documents-files), [WebKit release](https://developer.android.com/jetpack/androidx/releases/webkit), [AGP compatibility](https://developer.android.com/build/releases/agp-8-13-0-release-notes), [APK signing](https://developer.android.com/tools/apksigner). Review when Android APIs, package/key, data origin, runtime permissions or distribution changes.
 
-Current signed candidate: 0.4.1/code 5, full app label Бюро других жизней for [RuStore preparation](rustore.md). Verified v2/v3 signature and unchanged certificate/package; unsigned release bytes match across e8eaecb, 2def6e5 and b9e5a7e builds. All three Android35 instrumentation cases passed in run37500968161. This covers offline mission/diary/reload/Back and origin/destination boundaries; physical-phone system picker/Telegram and store moderation are still separate. The previous0.4.0 remains available for history. Package/key/schema/offline boundaries are unchanged.
+Historical signed candidate: 0.4.1/code 5, full app label Бюро других жизней for [RuStore preparation](rustore.md). Verified v2/v3 signature and unchanged certificate/package; unsigned release bytes match across e8eaecb, 2def6e5 and b9e5a7e builds. All three Android35 instrumentation cases passed in run37500968161. This covers offline mission/diary/reload/Back and origin/destination boundaries; physical-phone system picker/Telegram and store moderation are still separate. The previous0.4.0 remains available for history. Package/key/schema/offline boundaries are unchanged.
 
 2026-10-07 universal-sharing build: same min/target/package/signing key, versionCode 6; native catalogue is generated from the shared public source. Build/signature/emulator results are pending and will be recorded after observation. [Decision](decisions.md), [requirement](../.ai/ledger/requirement/universal-sharing.md).
 
 Initial0.4.2 native run37545161654: release/lint and debug/test compilation passed. Runtime public-share/origin/capture passed; exact settings-version test failed on the declared `-debug` suffix. Test-only correction preserves release UI/bytes and all four cases. Full acceptance/signature remains pending; [testing](testing.md) records the observed scope.
+
+Verified0.4.2 receipt: corrected native run37545984049/source8b072ecb193e5c2e87d607faf34753903d13d3cf passed release/lint,23 web checks and all4Android35 cases (32.42s). Unsigned SHA256b258b4b6b241a3d0df33be76a0c792e10742ad946c64ed4659c508044b79741a equals the earlier test-only source24855c5 release bytes. Signed APK1,993,607bytes/SHA2569018fe2d5e8c6afcef6a9df8acd41cc69296541c1bff563165900d06612ea230 verifies v2/v3 with the unchanged certificatea83b50bc5e1c69ea0d7eb1d3dd6096720680c7f22b2114753f07d9f975079c13, package ru.bureau.otherlives, code6/min26/target36/full label. Only the AndroidX internal signature permission is present. Exact-origin, local-only and public-share bounds remain. This receipt supersedes the pending candidate states above; no physical-phone SAF/client-delivery or RuStore moderation claim.

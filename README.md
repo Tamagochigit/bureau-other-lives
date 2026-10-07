@@ -38,7 +38,7 @@ npm start
 
 ## Android
 
-Android 0.4.2/code 6 готовится с универсальным «Поделиться» и тем же пакетом/ключом. Сборка, проверка и подпись этой версии ещё не завершены. Пока доступен [предыдущий подписанный APK 0.4.1](https://github.com/Tamagochigit/bureau-other-lives/raw/refs/heads/main/downloads/bureau-0.4.1.apk). [Сборка и восстановление](docs/android.md), [проверки](docs/testing.md), [материалы RuStore](docs/rustore.md). Дневник переносится совместимой JSON-копией.
+Android 0.4.2/code 6: [скачать подписанный APK](https://github.com/Tamagochigit/bureau-other-lives/raw/refs/heads/main/downloads/bureau-0.4.2.apk). Универсальное «Поделиться», прежние пакет и ключ обновлений. Проверены подпись v2/v3, 23 веб-теста и все 4 случая на Android35. Дневник переносится совместимой JSON-копией. [Сборка и восстановление](docs/android.md), [проверки](docs/testing.md), [материалы RuStore](docs/rustore.md). Реальная отправка получателю и системный выбор файлов на физическом телефоне остаются отдельной проверкой.
 
 ## Карточка RuStore
 
